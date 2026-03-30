@@ -1,0 +1,26 @@
+docs/plans/2026-03-30-repo-setup.md
+  f3dc755a2c6a6474 1-298
+docs/specs/2026-03-30-repo-setup-design.md
+  f3dc755a2c6a6474 1-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "b012404f3bf99385d89f4fc654bc662c21af8c97",
+  "prompts": {
+    "f3dc755a2c6a6474": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a911d4da-6d72-4a78-9136-17687a4a0876",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 391,
+      "total_deletions": 1,
+      "accepted_lines": 390,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/0b3a0cd1d36521adcb769ca470c9987eb26b169d7b56c1ca6a6f08d3d13ab094"
+    }
+  }
+}
