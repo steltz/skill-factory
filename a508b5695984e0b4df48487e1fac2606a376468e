@@ -1,0 +1,24 @@
+bin/validate-plugin
+  40c56608777d44eb 1-134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "a508b5695984e0b4df48487e1fac2606a376468e",
+  "prompts": {
+    "40c56608777d44eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b62a41a8-b49d-40c1-b266-403e389ed76e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 134,
+      "total_deletions": 0,
+      "accepted_lines": 134,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/06e04bc1a20cef93bb763d4ad1e64f6eb6019b5451d608a6ed478ec65535ffc3"
+    }
+  }
+}
