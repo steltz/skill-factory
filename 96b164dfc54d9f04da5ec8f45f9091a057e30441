@@ -1,0 +1,24 @@
+README.md
+  739c1d549a8ffa09 3,5,7,9-24,32,35,39,41,43,45-53,55,57,62,65-68,71,87-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "96b164dfc54d9f04da5ec8f45f9091a057e30441",
+  "prompts": {
+    "739c1d549a8ffa09": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "893e49e8-1c52-4e40-8769-66709ad8ed94",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 44,
+      "total_deletions": 97,
+      "accepted_lines": 44,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/a28d961fad8b3ef6b452f012fd3d0d79b3c4613a5b2897f86ef03bee838a9f2f"
+    }
+  }
+}
