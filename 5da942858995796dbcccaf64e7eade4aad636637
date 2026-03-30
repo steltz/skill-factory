@@ -1,0 +1,24 @@
+plugins/skill-factory-toolkit/skills/skill-anatomy/SKILL.md
+  40c56608777d44eb 1-197
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "5da942858995796dbcccaf64e7eade4aad636637",
+  "prompts": {
+    "40c56608777d44eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b62a41a8-b49d-40c1-b266-403e389ed76e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 197,
+      "total_deletions": 0,
+      "accepted_lines": 197,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/555120636af0e1182a102a58c2c8a6873f1c71e66abc77a7776ba2e093597905"
+    }
+  }
+}
