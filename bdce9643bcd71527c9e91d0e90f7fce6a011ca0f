@@ -1,0 +1,42 @@
+plugins/skill-factory-toolkit/hooks/session-start
+  9fd310e099131b8d 1-29
+plugins/skill-factory-toolkit/hooks/hooks.json
+  9fd310e099131b8d 1-16
+plugins/skill-factory-toolkit/hooks/run-hook.cmd
+  9fd310e099131b8d 1-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "bdce9643bcd71527c9e91d0e90f7fce6a011ca0f",
+  "prompts": {
+    "2ff0fc6f6fc96940": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb96c3c-e9bf-4b92-86ba-3ac3c127f993",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 29,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/7c600a575054a368319bd1cc5e53e46c4393841100889ec202db296d75d228ab"
+    },
+    "9fd310e099131b8d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3ea8c2ea-d22d-49aa-b89b-4717ed6e0ca9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 73,
+      "total_deletions": 0,
+      "accepted_lines": 376,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/70e63270475e54fbe017e8d425d2366bed5b226eea1c883cb3323866a7d11f63"
+    }
+  }
+}
