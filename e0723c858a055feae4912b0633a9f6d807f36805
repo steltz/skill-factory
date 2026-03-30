@@ -1,0 +1,24 @@
+references/superpowers/README.md
+  f3dc755a2c6a6474 1-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "e0723c858a055feae4912b0633a9f6d807f36805",
+  "prompts": {
+    "f3dc755a2c6a6474": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a911d4da-6d72-4a78-9136-17687a4a0876",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 34,
+      "total_deletions": 0,
+      "accepted_lines": 34,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/59e8d3ba6931ebbcfb8cec9f5058cd181c7cae083502b4803ede25e09733378d"
+    }
+  }
+}
