@@ -1,87 +1,80 @@
 # Skill Factory
 
-A production environment for authoring, validating, and publishing independent [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill plugins. Patterns modeled after [superpowers](https://github.com/obra/superpowers) v5.0.6.
+Domain expertise and guardrails for authoring Claude Code skill plugins.
 
-## Prerequisites
+[Superpowers](https://github.com/obra/superpowers) drives the process — brainstorming, planning, TDD, code review. Skill Factory provides what superpowers doesn't: reference material on what good skills look like, scaffolding to get the structure right, and automated checks to catch mistakes before you commit.
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
-- [superpowers](https://github.com/obra/superpowers) plugin installed (used for brainstorming, planning, TDD, and code review workflows)
+## What's in the Box
+
+**Authoring toolkit** (`plugins/skill-factory-toolkit/`) — Five skills that give Claude Code the domain knowledge to write effective skills:
+
+| Skill | What it provides |
+|-------|-----------------|
+| `scaffold-plugin` | Generates correct plugin structure so Claude doesn't guess from memory |
+| `cross-cutting-patterns` | Patterns distilled from studying all 14 superpowers skills — section frequency, word count targets, when to inline vs. use supporting files |
+| `skill-anatomy` | Structural breakdowns of representative skills showing why they're built the way they are |
+| `skill-comparison-matrix` | Decision guide for choosing between rigid and flexible skill structures |
+| `versioning-guide` | Semver rules specific to plugins (skill renames = major bumps because they break `plugin:skill` invocations) |
+
+**Validation infrastructure** — Automated quality gates that catch structural errors:
+
+- `bin/validate-plugin` checks frontmatter format, naming conventions, plugin.json schema, semver validity, and changelog coverage
+- `hooks/hooks.json` runs validation on every commit so broken plugins never land
+
+**Reference library** (`references/superpowers/`) — The complete superpowers v5.0.6 skills directory (14 skills with all supporting files) as canonical examples of structure and conventions.
 
 ## Quick Start
 
 ```bash
-# Clone the repo
 git clone https://github.com/steltz/skill-factory.git
 cd skill-factory
 
-# Install the factory toolkit (gives Claude Code authoring skills)
+# Install the authoring toolkit
 claude plugin add ./plugins/skill-factory-toolkit
 
-# Validate the toolkit is working
+# Verify everything works
 bin/validate-plugin plugins/skill-factory-toolkit
 ```
 
-## Creating a New Plugin
+Requires [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [superpowers](https://github.com/obra/superpowers).
 
-The factory workflow uses superpowers skills to guide each phase:
+## How Superpowers and Skill Factory Work Together
 
-### 1. Brainstorm
+Superpowers provides the development methodology. Skill Factory provides the skill-specific knowledge that methodology operates on.
 
-Start a Claude Code session and describe what you want to build. The `superpowers:brainstorming` skill will guide you through requirements and design, producing a spec in `docs/specs/`.
-
-### 2. Plan
-
-The `superpowers:writing-plans` skill breaks your spec into bite-sized implementation tasks, saved to `docs/plans/`.
-
-### 3. Scaffold
-
-When ready to create files, the `skill-factory-toolkit:scaffold-plugin` skill generates the correct directory structure:
-
-```
-plugins/my-plugin/
-├── .claude-plugin/
-│   └── plugin.json        # name, description, version
-├── skills/
-│   └── my-skill/
-│       └── SKILL.md       # YAML frontmatter + skill content
-├── CHANGELOG.md
-```
-
-### 4. Implement
-
-Author each skill using `superpowers:test-driven-development`:
-
-1. **RED** — Run a baseline test (subagent without the skill) to see what fails
-2. **GREEN** — Write the SKILL.md content
-3. **REFACTOR** — Close loopholes found during testing
-
-### 5. Validate and Ship
-
-```bash
-# Check your plugin passes all quality gates
-bin/validate-plugin plugins/my-plugin
-```
+| Phase | Superpowers provides | Skill Factory provides |
+|-------|---------------------|----------------------|
+| Design | `brainstorming` — structured exploration of intent and requirements | — |
+| Plan | `writing-plans` — breaks spec into tasks | — |
+| Scaffold | — | `scaffold-plugin` — correct directory structure, plugin.json, CHANGELOG, SKILL.md templates |
+| Author | — | `cross-cutting-patterns`, `skill-anatomy`, `skill-comparison-matrix` — what patterns work, what to avoid, how to structure each skill |
+| Test | `test-driven-development` — RED/GREEN/REFACTOR cycle | Reference library — 14 real skills to compare against |
+| Validate | — | `bin/validate-plugin` + pre-commit hooks — automated quality gates |
+| Version | — | `versioning-guide` — semver rules for plugins |
 
 ## Plugin Structure
 
 Every plugin under `plugins/` is self-contained and independently installable:
 
-| File | Required | Purpose |
-|------|----------|---------|
-| `.claude-plugin/plugin.json` | Yes | Plugin metadata: `name`, `description`, `version` |
-| `skills/<name>/SKILL.md` | Yes | Skill content with YAML frontmatter |
-| `CHANGELOG.md` | Yes | Version history in [Keep a Changelog](https://keepachangelog.com) format |
-| `hooks/hooks.json` | No | Claude Code session hooks |
+```
+plugins/my-plugin/
+├── .claude-plugin/
+│   └── plugin.json        # name, description, version (required)
+├── skills/
+│   └── my-skill/
+│       └── SKILL.md       # YAML frontmatter + skill content (required)
+├── CHANGELOG.md           # Keep a Changelog format (required)
+└── hooks/                 # Session hooks (optional)
+    └── hooks.json
+```
 
-Install any plugin with:
+Install any plugin:
 
 ```bash
 claude plugin add /path/to/skill-factory/plugins/<plugin-name>
 ```
 
 ## SKILL.md Format
-
-Every skill file requires YAML frontmatter:
 
 ```yaml
 ---
@@ -90,60 +83,14 @@ description: Use when <triggering conditions only>
 ---
 ```
 
-Rules:
 - `name` must be kebab-case and match the directory name
-- `description` must start with "Use when" and describe only **when** to trigger the skill, never the workflow itself
-- See `references/superpowers/skills/writing-skills/SKILL.md` for the full authoring guide
-
-## Validation
-
-Quality gates run automatically and on-demand:
-
-- **Pre-commit hook** (`hooks/hooks.json`) — Runs `bin/validate-plugin` against all plugins before each commit
-- **Manual validation** — `bin/validate-plugin plugins/<name>` checks:
-  - `plugin.json` has required fields and valid semver
-  - Directory name matches `plugin.json` name
-  - `CHANGELOG.md` exists with an entry for the current version
-  - Every skill has a `SKILL.md` with correct frontmatter
-  - Skill names are kebab-case
-  - Descriptions start with "Use when"
+- `description` must start with "Use when" and describe only **when** to trigger, never the workflow
+- This matters for Claude Search Optimization (CSO) — when descriptions summarize workflow, Claude follows the summary and skips the skill body
 
 ## Versioning
-
-Plugins follow semantic versioning:
 
 | Change | Bump |
 |--------|------|
 | Typo fix, clarification | Patch (x.y.**Z**) |
 | New skill, new supporting file | Minor (x.**Y**.0) |
 | Skill rename, removal, breaking trigger change | Major (**X**.0.0) |
-
-## Factory Toolkit Skills
-
-The `skill-factory-toolkit` plugin provides authoring guidance to Claude Code:
-
-| Skill | Purpose |
-|-------|---------|
-| `scaffold-plugin` | Generates correct plugin directory structure and templates |
-| `cross-cutting-patterns` | Patterns distilled from all 14 superpowers skills |
-| `skill-anatomy` | Structural breakdown of 3 representative skill types |
-| `skill-comparison-matrix` | Comparison table across all skills with decision guide |
-| `versioning-guide` | Semver rules, changelog format, compatibility conventions |
-
-## Reference Materials
-
-`references/superpowers/` contains the complete skills directory from superpowers v5.0.6 (14 skills with all supporting files). These serve as the canonical examples for skill structure and conventions.
-
-## Project Layout
-
-```
-skill-factory/
-├── plugins/                    # Independent, installable plugins
-│   └── skill-factory-toolkit/  # Built-in authoring toolkit
-├── hooks/hooks.json            # Pre-commit validation hook
-├── bin/validate-plugin         # Plugin validation script
-├── references/superpowers/     # superpowers v5.0.6 reference files
-├── docs/specs/                 # Design specs from brainstorming
-├── docs/plans/                 # Implementation plans
-└── CLAUDE.md                   # Project conventions (read by Claude Code)
-```
