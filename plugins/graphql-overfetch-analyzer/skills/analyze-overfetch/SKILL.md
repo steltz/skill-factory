@@ -20,6 +20,20 @@ FAIL criteria (placeholder skill fails if Claude does ANY of these without being
 
 Discover GraphQL queries in a codebase, trace how their results are consumed, identify fields that are fetched but never used, and auto-fix the queries.
 
+## When to Use
+
+- Codebase has GraphQL queries and you want to find unused fields
+- Performance optimization — reducing payload size
+- Code cleanup — removing dead query fields after feature removal
+- Pre-migration audit — understanding what data is actually consumed
+
+## When NOT to Use
+
+- No GraphQL in the codebase
+- Schema-only repos with no query consumers
+- Queries are dynamically generated at runtime (the skill traces static code)
+- User wants to analyze subscriptions or mutations (out of scope)
+
 ```
 NO PHASE MAY BE SKIPPED OR REORDERED.
 Discover → Trace → Fix. Hard gate between each.
@@ -222,6 +236,29 @@ After all fixes are applied, tell the user:
 > - Re-run GraphQL codegen if your project uses it (e.g., `graphql-codegen`, `relay-compiler`)
 > - Run your test suite to verify nothing broke
 > - Check if removed fields should also be removed from shared fragments used by other queries"
+
+## Red Flags
+
+These thoughts mean STOP — you are about to skip a phase:
+
+- "The queries are simple, I can skip the catalog"
+- "I already know which fields are unused"
+- "The user seems to want a quick answer"
+- "There's only one query, I don't need the full pipeline"
+- "I'll trace and fix at the same time to save time"
+- "The schema is obvious, I don't need to parse it"
+- "I'll just remove fields that look unused"
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|-----------------|---------|
+| "Only one query, skip the catalog" | One query still needs schema validation and user confirmation |
+| "Fields are obviously unused" | Obvious to you is not obvious — trace the code |
+| "Indeterminate means probably unused" | Indeterminate means you don't know. Leave it. |
+| "I'll combine Trace and Fix" | Combining phases skips the user validation gate |
+| "The user said to just fix it" | The user approved the pipeline. Follow it. |
+| "This field can't possibly be used" | Prove it by finding the consumer, or mark indeterminate |
 
 ## Out of Scope
 
