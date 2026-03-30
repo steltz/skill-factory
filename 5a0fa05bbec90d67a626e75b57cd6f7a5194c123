@@ -1,0 +1,24 @@
+CLAUDE.md
+  40c56608777d44eb 11-21,23-24,26-27,30-33,57,63-93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "5a0fa05bbec90d67a626e75b57cd6f7a5194c123",
+  "prompts": {
+    "40c56608777d44eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b62a41a8-b49d-40c1-b266-403e389ed76e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 51,
+      "total_deletions": 4,
+      "accepted_lines": 51,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/44701d556e86106d6d7286abac709cd0b3c2872bed031c2f5d88b02a96c69588"
+    }
+  }
+}
