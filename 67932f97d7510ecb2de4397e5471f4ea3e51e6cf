@@ -1,0 +1,48 @@
+plugins/skill-factory-toolkit/skills/sft-scaffold-plugin/SKILL.md
+  2ff0fc6f6fc96940 2
+plugins/skill-factory-toolkit/skills/sft-skill-comparison-matrix/SKILL.md
+  2ff0fc6f6fc96940 2,49,102
+README.md
+  2ff0fc6f6fc96940 13-17,52-53,56
+plugins/skill-factory-toolkit/skills/sft-versioning-guide/SKILL.md
+  2ff0fc6f6fc96940 2,16
+plugins/skill-factory-toolkit/skills/sft-skill-anatomy/SKILL.md
+  2ff0fc6f6fc96940 2
+plugins/skill-factory-toolkit/skills/sft-cross-cutting-patterns/SKILL.md
+  2ff0fc6f6fc96940 2,54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "67932f97d7510ecb2de4397e5471f4ea3e51e6cf",
+  "prompts": {
+    "2ff0fc6f6fc96940": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb96c3c-e9bf-4b92-86ba-3ac3c127f993",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 17,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/7c600a575054a368319bd1cc5e53e46c4393841100889ec202db296d75d228ab"
+    },
+    "9fd310e099131b8d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3ea8c2ea-d22d-49aa-b89b-4717ed6e0ca9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 303,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/f5fd96acf5b4a929d115199a721e4c93660ef79f3f880360278a1cd8624ca368"
+    }
+  }
+}
