@@ -12,11 +12,11 @@ skill-factory/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
 │   │   ├── skills/
-│   │   │   ├── scaffold-plugin/
-│   │   │   ├── cross-cutting-patterns/
-│   │   │   ├── skill-anatomy/
-│   │   │   ├── skill-comparison-matrix/
-│   │   │   └── versioning-guide/
+│   │   │   ├── sft-scaffold-plugin/
+│   │   │   ├── sft-cross-cutting-patterns/
+│   │   │   ├── sft-skill-anatomy/
+│   │   │   ├── sft-skill-comparison-matrix/
+│   │   │   └── sft-versioning-guide/
 │   │   └── CHANGELOG.md
 │   └── <plugin-name>/                 # Your plugins follow this structure
 │       ├── .claude-plugin/
@@ -68,7 +68,7 @@ Plugins follow semantic versioning:
 - **Minor** (x.Y.0) — New skills, supporting files, non-breaking trigger changes
 - **Major** (X.0.0) — Skill renames, removals, breaking trigger changes
 
-See the `skill-factory-toolkit:versioning-guide` skill for full rules, CHANGELOG format, and compatibility conventions.
+See the `skill-factory-toolkit:sft-versioning-guide` skill for full rules, CHANGELOG format, and compatibility conventions.
 
 ## Validation
 
@@ -83,11 +83,11 @@ Repo-level hooks and scripts enforce plugin quality:
 
 | Skill | Trigger |
 |-------|---------|
-| `scaffold-plugin` | Use when creating a new plugin |
-| `cross-cutting-patterns` | Use when authoring a SKILL.md |
-| `skill-anatomy` | Use when studying how superpowers skills are structured |
-| `skill-comparison-matrix` | Use when deciding how to structure a new skill |
-| `versioning-guide` | Use when bumping versions or creating changelog entries |
+| `sft-scaffold-plugin` | Use when creating a new plugin |
+| `sft-cross-cutting-patterns` | Use when authoring a SKILL.md |
+| `sft-skill-anatomy` | Use when studying how superpowers skills are structured |
+| `sft-skill-comparison-matrix` | Use when deciding how to structure a new skill |
+| `sft-versioning-guide` | Use when bumping versions or creating changelog entries |
 
 Install: `claude plugin marketplace add /path/to/skill-factory && claude plugin install skill-factory-toolkit`
 
@@ -99,6 +99,20 @@ When creating new skills:
 2. **Plan** — Use superpowers:writing-plans to break the spec into bite-sized tasks, saved to `docs/plans/`
 3. **Implement** — Use superpowers:test-driven-development to author the skill (baseline -> write -> close loopholes)
 4. **Package** — Structure as a plugin with `.claude-plugin/plugin.json`
+
+## Skill Auto-Loading
+
+When doing skill-authoring work in this repo, you MUST invoke the relevant sft skills before proceeding. This is not optional — these skills contain the patterns and standards that ensure quality.
+
+| When you are... | Invoke these sft skills first |
+|---|---|
+| Brainstorming a new skill or plugin idea | `sft-skill-comparison-matrix`, `sft-skill-anatomy` |
+| Planning skill implementation | `sft-cross-cutting-patterns`, `sft-scaffold-plugin` |
+| Writing or editing a SKILL.md | `sft-cross-cutting-patterns`, `sft-skill-comparison-matrix` |
+| Creating a new plugin | `sft-scaffold-plugin` |
+| Bumping versions or writing changelog | `sft-versioning-guide` |
+
+Load the mapped skills at the start of the relevant workflow stage. Do not load all 5 at once — only the subset for your current activity.
 
 ## Reference Files
 
