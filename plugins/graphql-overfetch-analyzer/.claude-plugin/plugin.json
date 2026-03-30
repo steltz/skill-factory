@@ -1,0 +1,5 @@
+{
+  "name": "graphql-overfetch-analyzer",
+  "description": "Analyze GraphQL queries for over-fetching of data",
+  "version": "0.1.0"
+}
