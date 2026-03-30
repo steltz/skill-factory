@@ -1,5 +1,5 @@
 ---
-name: versioning-guide
+name: sft-versioning-guide
 description: Use when bumping plugin versions, creating changelog entries, or declaring compatibility requirements
 ---
 
@@ -13,7 +13,7 @@ Semantic versioning rules and changelog conventions for skill-factory plugins.
 - Writing CHANGELOG.md entries
 - Deciding whether a change is patch, minor, or major
 - Adding compatibility declarations to plugin.json
-- NOT for skill content decisions — use cross-cutting-patterns for that
+- NOT for skill content decisions — use sft-cross-cutting-patterns for that
 
 ## Semver Rules for Plugins
 

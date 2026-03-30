@@ -1,5 +1,5 @@
 ---
-name: cross-cutting-patterns
+name: sft-cross-cutting-patterns
 description: Use when authoring a SKILL.md to ensure it follows established patterns across all superpowers skills
 ---
 
@@ -51,7 +51,7 @@ Machine-readable reference for SKILL.md authoring. Patterns extracted from 14 su
 
 ### Reference
 
-**Examples:** cross-cutting-patterns (this skill), skill comparison matrices
+**Examples:** sft-cross-cutting-patterns (this skill), skill comparison matrices
 
 **Structural markers:**
 - Tables as primary content format

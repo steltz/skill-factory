@@ -10,11 +10,11 @@ Domain expertise and guardrails for authoring Claude Code skill plugins.
 
 | Skill | What it provides |
 |-------|-----------------|
-| `scaffold-plugin` | Generates correct plugin structure so Claude doesn't guess from memory |
-| `cross-cutting-patterns` | Patterns distilled from studying all 14 superpowers skills — section frequency, word count targets, when to inline vs. use supporting files |
-| `skill-anatomy` | Structural breakdowns of representative skills showing why they're built the way they are |
-| `skill-comparison-matrix` | Decision guide for choosing between rigid and flexible skill structures |
-| `versioning-guide` | Semver rules specific to plugins (skill renames = major bumps because they break `plugin:skill` invocations) |
+| `sft-scaffold-plugin` | Generates correct plugin structure so Claude doesn't guess from memory |
+| `sft-cross-cutting-patterns` | Patterns distilled from studying all 14 superpowers skills — section frequency, word count targets, when to inline vs. use supporting files |
+| `sft-skill-anatomy` | Structural breakdowns of representative skills showing why they're built the way they are |
+| `sft-skill-comparison-matrix` | Decision guide for choosing between rigid and flexible skill structures |
+| `sft-versioning-guide` | Semver rules specific to plugins (skill renames = major bumps because they break `plugin:skill` invocations) |
 
 **Validation infrastructure** — Automated quality gates that catch structural errors:
 
@@ -49,11 +49,11 @@ Superpowers provides the development methodology. Skill Factory provides the ski
 |-------|---------------------|----------------------|
 | Design | `brainstorming` — structured exploration of intent and requirements | — |
 | Plan | `writing-plans` — breaks spec into tasks | — |
-| Scaffold | — | `scaffold-plugin` — correct directory structure, plugin.json, CHANGELOG, SKILL.md templates |
-| Author | — | `cross-cutting-patterns`, `skill-anatomy`, `skill-comparison-matrix` — what patterns work, what to avoid, how to structure each skill |
+| Scaffold | — | `sft-scaffold-plugin` — correct directory structure, plugin.json, CHANGELOG, SKILL.md templates |
+| Author | — | `sft-cross-cutting-patterns`, `sft-skill-anatomy`, `sft-skill-comparison-matrix` — what patterns work, what to avoid, how to structure each skill |
 | Test | `test-driven-development` — RED/GREEN/REFACTOR cycle | Reference library — 14 real skills to compare against |
 | Validate | — | `bin/validate-plugin` + pre-commit hooks — automated quality gates |
-| Version | — | `versioning-guide` — semver rules for plugins |
+| Version | — | `sft-versioning-guide` — semver rules for plugins |
 
 ## Plugin Structure
 

@@ -1,5 +1,5 @@
 ---
-name: skill-anatomy
+name: sft-skill-anatomy
 description: Use when studying how superpowers skills are structured to understand why each section exists
 ---
 

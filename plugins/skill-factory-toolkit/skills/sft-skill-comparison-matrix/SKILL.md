@@ -1,5 +1,5 @@
 ---
-name: skill-comparison-matrix
+name: sft-skill-comparison-matrix
 description: Use when deciding how to structure a new skill — whether to use checklists, supporting files, rigid enforcement, etc.
 ---
 
@@ -46,7 +46,7 @@ Given characteristics of a new skill, pick the closest existing template:
 |------------------|-------------|-----|
 | Enforces a process discipline (rules that must not be broken) | `test-driven-development` | Iron Law + rationalizations table + red flags + verification checklist |
 | Guides a creative or exploratory process | `brainstorming` | Checklist with flexibility, visual companion pattern, user-gated progression |
-| Is a reference that Claude looks up (tables, lookup data) | `cross-cutting-patterns` | Tables as primary format, minimal prose, scan-optimized |
+| Is a reference that Claude looks up (tables, lookup data) | `sft-cross-cutting-patterns` | Tables as primary format, minimal prose, scan-optimized |
 | Dispatches subagents to do work | `subagent-driven-development` | Prompt templates as supporting files, status handling, review loops |
 | Is a meta-skill about skills or tool usage | `writing-skills` | Self-referential structure, TDD mapping, skill type taxonomy |
 | Coordinates a multi-step workflow | `executing-plans` | Lightweight checklist, integration section, calls other skills |
@@ -99,7 +99,7 @@ Given characteristics of a new skill, pick the closest existing template:
 - Decision guide or lookup key
 - No enforcement language
 
-**Skills:** cross-cutting-patterns, skill-comparison-matrix (this skill)
+**Skills:** sft-cross-cutting-patterns, sft-skill-comparison-matrix (this skill)
 
 ### Meta Skills
 

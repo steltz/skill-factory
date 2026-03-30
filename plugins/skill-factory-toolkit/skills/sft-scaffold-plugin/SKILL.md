@@ -1,5 +1,5 @@
 ---
-name: scaffold-plugin
+name: sft-scaffold-plugin
 description: Use when creating a new plugin — generates the full directory structure, plugin.json, SKILL.md template with correct frontmatter, and optional hooks/
 ---
 
