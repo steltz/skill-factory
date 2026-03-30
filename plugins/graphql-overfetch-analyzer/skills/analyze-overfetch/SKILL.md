@@ -170,3 +170,63 @@ STOP. Present the over-fetch report and ask:
 
 Do NOT proceed to Phase 3 until the user confirms.
 </HARD-GATE>
+
+## Phase 3: Fix
+
+Apply fixes to eliminate over-fetched fields from queries.
+
+### Step 3.1: Present Report Summary
+
+Present the over-fetch report grouped by severity (most unused fields first):
+
+```
+1. GetUserProfile — 5 unused fields (src/queries/user.graphql:3)
+2. GetPostList — 3 unused fields (src/queries/posts.graphql:1)
+3. GetSettings — 1 unused field (src/queries/settings.graphql:8)
+```
+
+### Step 3.2: User Selects Fix Scope
+
+Ask the user:
+
+> "How would you like to proceed?
+> 1. **Fix all** — Remove unused fields from all queries
+> 2. **Fix per-query** — Walk through each query, confirm individually
+> 3. **Report only** — No changes, keep the report as documentation"
+
+Wait for the user's choice before proceeding.
+
+### Step 3.3: Apply Edits
+
+For each query the user has confirmed:
+
+1. Open the file containing the query definition
+2. Remove each unused field from the selection set
+3. If removing a field leaves an empty selection set on a nested object, remove the entire nested selection (e.g., if `posts { body }` had `body` removed and no other fields remain, remove the `posts` selection entirely)
+4. Preserve formatting, comments, and field aliases
+5. Do NOT modify indeterminate fields
+
+### Step 3.4: Verify Syntax
+
+After applying edits, re-read each modified query and verify:
+
+- The query still parses as valid GraphQL (balanced braces, no trailing commas, no empty selection sets)
+- No fields were accidentally removed that were marked as used or indeterminate
+- If any syntax issue is found, fix it immediately
+
+### Post-Fix Guidance
+
+After all fixes are applied, tell the user:
+
+> "Fixes applied. Follow-up actions:
+> - Re-run GraphQL codegen if your project uses it (e.g., `graphql-codegen`, `relay-compiler`)
+> - Run your test suite to verify nothing broke
+> - Check if removed fields should also be removed from shared fragments used by other queries"
+
+## Out of Scope
+
+This skill does NOT:
+- Modify the GraphQL schema
+- Update TypeScript generated types (re-run codegen instead)
+- Analyze mutations or subscriptions (over-fetching is a query concern)
+- Run external tools or scripts
