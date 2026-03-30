@@ -1,0 +1,38 @@
+.claude-plugin/marketplace.json
+  739c1d549a8ffa09 16-22
+plugins/strangler-fig/skills/strangulate/SKILL.md
+  739c1d549a8ffa09 1-8
+plugins/strangler-fig/skills/growth/SKILL.md
+  739c1d549a8ffa09 1-8
+plugins/strangler-fig/.claude-plugin/plugin.json
+  739c1d549a8ffa09 1-5
+plugins/strangler-fig/skills/decommission/SKILL.md
+  739c1d549a8ffa09 1-8
+plugins/strangler-fig/skills/assess/SKILL.md
+  739c1d549a8ffa09 1-8
+plugins/strangler-fig/CHANGELOG.md
+  739c1d549a8ffa09 1-11
+plugins/strangler-fig/skills/seed/SKILL.md
+  739c1d549a8ffa09 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "95e1053b761ec8893ddd587aa765607357f2a4c0",
+  "prompts": {
+    "739c1d549a8ffa09": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "893e49e8-1c52-4e40-8769-66709ad8ed94",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 63,
+      "total_deletions": 0,
+      "accepted_lines": 63,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/22f3befe68a0ccc73630add98dd0671096db20410f2d26a900142d945cb21ab7"
+    }
+  }
+}
