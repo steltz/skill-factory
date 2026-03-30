@@ -56,7 +56,7 @@ Each plugin under `plugins/` is a self-contained, installable unit:
 - `skills/` contains one or more skill directories, each with a `SKILL.md`
 - `CHANGELOG.md` is required — follows Keep a Changelog format with an entry for every version
 - `hooks/` is optional — include `hooks.json` only if the plugin needs session hooks
-- Install with: `claude plugin add /path/to/skill-factory/plugins/<plugin-name>`
+- Install: register the repo as a marketplace (`claude plugin marketplace add /path/to/skill-factory`), then `claude plugin install <plugin-name>`
 
 See `references/superpowers/plugin-structure/` for examples.
 
@@ -89,7 +89,7 @@ Repo-level hooks and scripts enforce plugin quality:
 | `skill-comparison-matrix` | Use when deciding how to structure a new skill |
 | `versioning-guide` | Use when bumping versions or creating changelog entries |
 
-Install: `claude plugin add /path/to/skill-factory/plugins/skill-factory-toolkit`
+Install: `claude plugin marketplace add /path/to/skill-factory && claude plugin install skill-factory-toolkit`
 
 ## Workflow
 

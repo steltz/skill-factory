@@ -29,8 +29,11 @@ Domain expertise and guardrails for authoring Claude Code skill plugins.
 git clone https://github.com/steltz/skill-factory.git
 cd skill-factory
 
+# Register the skill-factory as a local marketplace
+claude plugin marketplace add /path/to/skill-factory
+
 # Install the authoring toolkit
-claude plugin add ./plugins/skill-factory-toolkit
+claude plugin install skill-factory-toolkit
 
 # Verify everything works
 bin/validate-plugin plugins/skill-factory-toolkit
