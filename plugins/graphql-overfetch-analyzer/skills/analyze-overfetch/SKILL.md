@@ -96,3 +96,77 @@ STOP. Present the catalog and ask:
 
 Do NOT proceed to Phase 2 until the user confirms.
 </HARD-GATE>
+
+## Phase 2: Trace
+
+For each query in the validated catalog, trace how the result is consumed in application code.
+
+### Step 2.1: Find the Consumer
+
+Starting from where the query is invoked, identify the variable that holds the response data:
+
+- JS/TS: `const { data } = useQuery(GET_USER)` → trace `data`
+- Python: `result = client.execute(query)` → trace `result`
+- Go: `resp, err := client.Query(ctx, &query, vars)` → trace `resp` or `query`
+
+If the query is defined in a standalone `.graphql` file, search for imports or references to that file to find the invocation site.
+
+### Step 2.2: Track Field Access
+
+Follow the response variable through the consuming code. Record every field access:
+
+- **Destructuring:** `const { user: { name, email } } = data` → `user.name`, `user.email` used
+- **Dot notation:** `data.user.name` → `user.name` used
+- **Bracket notation:** `data['user']['name']` → `user.name` used
+- **Spread:** `{ ...data.user }` into a typed target → all fields of `user` used
+- **Function arguments:** `renderProfile(data.user)` → follow into `renderProfile` one level deep
+- **Map/iteration:** `data.posts.map(p => p.title)` → `posts.title` used
+
+### Step 2.3: Handle Indirection
+
+Follow the response variable one level deep into called functions or child components. If the data disappears into any of these patterns, mark ALL fields on that path as **indeterminate** (not unused):
+
+- `JSON.stringify(data)` — opaque serialization
+- `console.log(data)` or logging utilities
+- `Object.keys(data.user)` — dynamic access
+- `data[variableName]` — computed property access
+- Spread into an untyped target: `{ ...data.user }` with no type annotation
+- Reflection or metaprogramming
+
+**Indeterminate means "we can't tell" — never flag indeterminate fields as unused.**
+
+### Step 2.4: Build the Usage Map
+
+For each query, produce:
+
+| Category | Fields |
+|----------|--------|
+| **Fetched** | All fields selected in the query |
+| **Used** | Fields with confirmed access in consuming code |
+| **Unused** | Fetched minus Used minus Indeterminate |
+| **Indeterminate** | Fields where usage could not be determined |
+
+### Step 2.5: Compile the Over-Fetch Report
+
+For each query that has unused fields:
+
+```
+Query: GetUser (src/queries/user.graphql:3)
+Consumer: src/components/UserProfile.tsx:15
+Unused fields: user.createdAt, user.updatedAt, user.posts.body
+Indeterminate fields: user.metadata (spread into untyped object)
+```
+
+### Phase 2 Gate
+
+<HARD-GATE>
+STOP. Present the over-fetch report and ask:
+
+> "Here are the over-fetching findings for N queries. For each query I've listed:
+> - Fields confirmed unused
+> - Fields marked indeterminate (conservatively kept)
+>
+> Please review. Are any findings incorrect? Confirm to proceed to fixes."
+
+Do NOT proceed to Phase 3 until the user confirms.
+</HARD-GATE>
