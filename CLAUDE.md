@@ -24,7 +24,7 @@ skill-factory/
 
 ## Skill Authoring Standards
 
-The authoritative guide is `references/superpowers/writing-skills/SKILL.md`. These rules are non-negotiable:
+The authoritative guide is `references/superpowers/skills/writing-skills/SKILL.md`. These rules are non-negotiable:
 
 - Every SKILL.md has YAML frontmatter with `name` and `description`
 - `description` starts with "Use when..." — triggering conditions only, never a workflow summary
@@ -55,4 +55,4 @@ When creating new skills:
 
 ## Reference Files
 
-`references/superpowers/` contains curated files from superpowers v5.0.6. Read these to understand the patterns. See `references/superpowers/README.md` for contents and provenance.
+`references/superpowers/` contains the complete skills directory from superpowers v5.0.6 — all 15 skills with supporting files. Read these to understand the patterns. See `references/superpowers/README.md` for contents and provenance.
