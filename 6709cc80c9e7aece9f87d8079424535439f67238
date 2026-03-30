@@ -1,0 +1,24 @@
+plugins/skill-factory-toolkit/skills/skill-comparison-matrix/SKILL.md
+  40c56608777d44eb 1-167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "6709cc80c9e7aece9f87d8079424535439f67238",
+  "prompts": {
+    "40c56608777d44eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b62a41a8-b49d-40c1-b266-403e389ed76e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 167,
+      "total_deletions": 0,
+      "accepted_lines": 167,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/13f5c883d476b1f87b523be336842b4dd173c643100f81275278bd634544a436"
+    }
+  }
+}
