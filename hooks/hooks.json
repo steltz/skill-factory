@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreCommit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "for dir in plugins/*/; do [ -f \"$dir/.claude-plugin/plugin.json\" ] && bin/validate-plugin \"$dir\"; done",
+            "async": false
+          }
+        ]
+      }
+    ]
+  }
+}
