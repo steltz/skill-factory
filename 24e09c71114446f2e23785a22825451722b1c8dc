@@ -1,0 +1,53 @@
+CLAUDE.md
+  2ff0fc6f6fc96940 15-19,71,86-90
+  9fd310e099131b8d 103-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "24e09c71114446f2e23785a22825451722b1c8dc",
+  "prompts": {
+    "2ff0fc6f6fc96940": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6bb96c3c-e9bf-4b92-86ba-3ac3c127f993",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 40,
+      "total_deletions": 29,
+      "accepted_lines": 40,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/7c600a575054a368319bd1cc5e53e46c4393841100889ec202db296d75d228ab"
+    },
+    "739c1d549a8ffa09": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "893e49e8-1c52-4e40-8769-66709ad8ed94",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 121,
+      "total_deletions": 1,
+      "accepted_lines": 121,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/1695f409788d245e80d84eee14d26c645b52520f855e9453cf472ffa006b3a42"
+    },
+    "9fd310e099131b8d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3ea8c2ea-d22d-49aa-b89b-4717ed6e0ca9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 317,
+      "total_deletions": 0,
+      "accepted_lines": 317,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/98ea12e49aca1b86f5f0600fd2a77e726a329b9ecf6eea69d36ae9ca65acbb91"
+    }
+  }
+}
