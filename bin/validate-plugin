@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Validate a skill-factory plugin directory.
+# Usage: bin/validate-plugin plugins/<plugin-name>
+
+PLUGIN_DIR="${1:?Usage: bin/validate-plugin <plugin-dir>}"
+
+if [[ ! -d "$PLUGIN_DIR" ]]; then
+  echo "FAIL: Directory does not exist: $PLUGIN_DIR"
+  exit 1
+fi
+
+ERRORS=0
+
+fail() {
+  echo "FAIL: $1"
+  ERRORS=$((ERRORS + 1))
+}
+
+# --- plugin.json checks ---
+
+PLUGIN_JSON="$PLUGIN_DIR/.claude-plugin/plugin.json"
+
+if [[ ! -f "$PLUGIN_JSON" ]]; then
+  fail "Missing $PLUGIN_JSON"
+else
+  # Required fields: name, description, version
+  for field in name description version; do
+    val=$(python3 -c "import json,sys; d=json.load(open('$PLUGIN_JSON')); print(d.get('$field',''))" 2>/dev/null || true)
+    if [[ -z "$val" ]]; then
+      fail "plugin.json missing required field: $field"
+    fi
+  done
+
+  # Version must be valid semver (basic check: X.Y.Z where X,Y,Z are numbers)
+  version=$(python3 -c "import json; print(json.load(open('$PLUGIN_JSON')).get('version',''))" 2>/dev/null || true)
+  if [[ -n "$version" ]] && ! echo "$version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    fail "plugin.json version '$version' is not valid semver (expected X.Y.Z)"
+  fi
+
+  # Plugin directory name should match plugin.json name
+  dir_name=$(basename "$PLUGIN_DIR")
+  json_name=$(python3 -c "import json; print(json.load(open('$PLUGIN_JSON')).get('name',''))" 2>/dev/null || true)
+  if [[ -n "$json_name" && "$dir_name" != "$json_name" ]]; then
+    fail "Directory name '$dir_name' does not match plugin.json name '$json_name'"
+  fi
+fi
+
+# --- CHANGELOG.md checks ---
+
+CHANGELOG="$PLUGIN_DIR/CHANGELOG.md"
+
+if [[ ! -f "$CHANGELOG" ]]; then
+  fail "Missing $CHANGELOG"
+else
+  # Check that current version appears in CHANGELOG
+  if [[ -n "${version:-}" ]] && ! grep -qF "[$version]" "$CHANGELOG"; then
+    fail "CHANGELOG.md has no entry for current version $version"
+  fi
+fi
+
+# --- Skills checks ---
+
+SKILLS_DIR="$PLUGIN_DIR/skills"
+
+if [[ -d "$SKILLS_DIR" ]]; then
+  for skill_dir in "$SKILLS_DIR"/*/; do
+    [[ -d "$skill_dir" ]] || continue
+    skill_name=$(basename "$skill_dir")
+
+    # Skip .gitkeep-only directories
+    if [[ "$skill_name" == ".gitkeep" ]]; then
+      continue
+    fi
+
+    skill_md="$skill_dir/SKILL.md"
+
+    if [[ ! -f "$skill_md" ]]; then
+      fail "Skill '$skill_name' missing SKILL.md"
+      continue
+    fi
+
+    # Check YAML frontmatter exists (starts with ---)
+    first_line=$(head -1 "$skill_md")
+    if [[ "$first_line" != "---" ]]; then
+      fail "Skill '$skill_name' SKILL.md missing YAML frontmatter (must start with ---)"
+      continue
+    fi
+
+    # Extract frontmatter (between first and second ---)
+    frontmatter=$(sed -n '1,/^---$/{ /^---$/d; p; }' "$skill_md" | tail -n +1)
+
+    # Check name field exists and is kebab-case
+    fm_name=$(echo "$frontmatter" | grep -E '^name:' | sed 's/^name:[[:space:]]*//' | tr -d '"' | tr -d "'" | xargs || true)
+    if [[ -z "$fm_name" ]]; then
+      fail "Skill '$skill_name' SKILL.md frontmatter missing 'name' field"
+    elif ! echo "$fm_name" | grep -qE '^[a-z0-9]+(-[a-z0-9]+)*$'; then
+      fail "Skill '$skill_name' name '$fm_name' is not kebab-case (letters, numbers, hyphens only)"
+    fi
+
+    if [[ -n "$fm_name" && "$skill_name" != "$fm_name" ]]; then
+      fail "Skill directory name '$skill_name' does not match SKILL.md name '$fm_name'"
+    fi
+
+    # Check description field exists and starts with "Use when"
+    fm_desc=$(echo "$frontmatter" | grep -E '^description:' | sed 's/^description:[[:space:]]*//' | sed 's/^["'"'"']//' | sed 's/["'"'"']$//' | xargs || true)
+    if [[ -z "$fm_desc" ]]; then
+      fail "Skill '$skill_name' SKILL.md frontmatter missing 'description' field"
+    elif ! echo "$fm_desc" | grep -qE '^Use when'; then
+      fail "Skill '$skill_name' description must start with 'Use when' (got: '${fm_desc:0:40}...')"
+    fi
+  done
+fi
+
+# --- Summary ---
+
+if [[ $ERRORS -gt 0 ]]; then
+  echo ""
+  echo "Validation FAILED with $ERRORS error(s)"
+  exit 1
+else
+  echo "Validation PASSED: $PLUGIN_DIR"
+  exit 0
+fi
