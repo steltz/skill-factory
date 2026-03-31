@@ -1,0 +1,24 @@
+docs/plans/2026-03-30-sft-build-plugin.md
+  68edad67aedfeb22 1-378
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "b4a05181319c16b934d678b0c74fe982cf9c7fb0",
+  "prompts": {
+    "68edad67aedfeb22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4195655b-15bf-4373-bcee-08e1349dd9b2",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 378,
+      "total_deletions": 0,
+      "accepted_lines": 378,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/24e730655892bff748796c60631d4c9931a533d7f525b8710c10ec181e76855b"
+    }
+  }
+}
