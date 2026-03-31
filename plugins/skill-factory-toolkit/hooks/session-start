@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-REMINDER="[skill-factory-toolkit] When doing skill-authoring work, auto-load the relevant sft skills:\n\n  Brainstorming a skill/plugin  -> sft-skill-comparison-matrix, sft-skill-anatomy\n  Planning skill implementation -> sft-cross-cutting-patterns, sft-scaffold-plugin\n  Writing/editing a SKILL.md    -> sft-cross-cutting-patterns, sft-skill-comparison-matrix\n  Creating a new plugin         -> sft-scaffold-plugin\n  Bumping versions/changelog    -> sft-versioning-guide\n\nInvoke the mapped skills at the start of the relevant workflow stage. Do not load all 5 at once."
+REMINDER="[skill-factory-toolkit] To build a new skill or plugin, invoke sft-build-plugin.\\nIt handles sft skill loading at each phase automatically."
 
 escape_for_json() {
     local s="$1"
