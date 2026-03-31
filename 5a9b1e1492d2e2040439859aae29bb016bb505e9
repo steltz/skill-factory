@@ -1,0 +1,46 @@
+plugins/skill-factory-toolkit/skills/sft-cross-cutting-patterns/baseline-test-guide.md
+  54ddfd906968a8d8 1-65
+bin/validate-plugin
+  54ddfd906968a8d8 113-187
+plugins/skill-factory-toolkit/skills/sft-skill-anatomy/skill-analyses.md
+  54ddfd906968a8d8 1-158
+plugins/skill-factory-toolkit/skills/sft-versioning-guide/SKILL.md
+  54ddfd906968a8d8 91-103
+plugins/skill-factory-toolkit/.claude-plugin/plugin.json
+  54ddfd906968a8d8 4
+plugins/skill-factory-toolkit/skills/sft-build-plugin/SKILL.md
+  54ddfd906968a8d8 17,42-43,55-69,78-91
+plugins/skill-factory-toolkit/skills/sft-skill-anatomy/SKILL.md
+  54ddfd906968a8d8 12,14,16-20,33-34,49-54
+plugins/skill-factory-toolkit/hooks/session-start
+  54ddfd906968a8d8 3,7-22
+plugins/skill-factory-toolkit/CHANGELOG.md
+  54ddfd906968a8d8 3-20
+plugins/skill-factory-toolkit/skills/sft-cross-cutting-patterns/SKILL.md
+  54ddfd906968a8d8 173-178
+plugins/skill-factory-toolkit/skills/sft-skill-comparison-matrix/SKILL.md
+  54ddfd906968a8d8 57-86,167-169
+CLAUDE.md
+  54ddfd906968a8d8 78-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "5a9b1e1492d2e2040439859aae29bb016bb505e9",
+  "prompts": {
+    "54ddfd906968a8d8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ee3ff28d-5668-4173-b3e1-361f78dab480",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 452,
+      "total_deletions": 182,
+      "accepted_lines": 435,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/c37ac72eb1b2f7811986ea720a4c5c1c0cb90d1dd22f4956f6c3c52031840f8d"
+    }
+  }
+}
