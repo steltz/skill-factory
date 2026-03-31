@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0] - 2026-03-30
+
+### Added
+
+- sft-build-plugin skill — single entry point for building skills/plugins with automatic sft pre-loading at each phase
+
+### Changed
+
+- **BREAKING:** CLAUDE.md Workflow section and Skill Auto-Loading table replaced with sft-build-plugin directive
+- **BREAKING:** SessionStart hook message simplified to point at sft-build-plugin
+
 ## [2.1.0] - 2026-03-30
 
 ### Added
