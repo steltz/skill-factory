@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0] - 2026-03-31
+
+### Added
+
+- Shared query anti-pattern detection (Step 3.3) — identifies when multiple files import the same query but each consumer uses a different field subset, recommends per-page query splitting
+- Shared query splitting in Phase 4 (Step 4.2) — creates per-page query variants and updates consumer imports
+- Active codegen step (Step 4.5) — detects and runs the project's GraphQL code generation tool after edits, catches references to removed fields
+- Active type check step (Step 4.6) — detects and runs the project's type checker after codegen, catches type errors introduced by the refactor
+- Post-Fix Summary with codegen/type-check status reporting
+- 4 red flags, 4 rationalizations, 3 verification checklist items, and 4 When Stuck rows for shared query detection and post-fix verification
+
+### Changed
+
+- Phase 3 Gate options now include query splitting alongside fragment splitting
+- Phase 4 checklist expanded from 3 steps to 6 steps (field removals, query splits, fragment splits, syntax check, codegen, type check)
+- Post-Fix Guidance replaced with active verification steps (codegen + type checks are no longer passive advice)
+- Out of Scope updated — skill now runs codegen and type checks directly
+
 ## [1.1.0] - 2026-03-30
 
 ### Added

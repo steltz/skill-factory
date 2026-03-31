@@ -51,10 +51,11 @@ You MUST create a task for each of these items and complete them in order:
 2. **Phase 1 Gate** — present catalog, wait for user validation
 3. **Phase 2: Trace** — trace field consumption per operation and fragment
 4. **Phase 2 Gate** — present usage maps, wait for user validation
-5. **Phase 3: Audit** — cross-reference findings, rank severity, identify fragment splits
+5. **Phase 3: Audit** — cross-reference findings, rank severity, identify query and fragment splits
 6. **Phase 3 Gate** — present findings report, user selects fix scope
-7. **Phase 4: Fix** — apply edits, verify syntax
-8. **Post-fix verification** — run verification checklist
+7. **Phase 4: Fix** — apply field removals, query splits, fragment splits, verify syntax
+8. **Phase 4: Verify** — run codegen, run type checks, fix any errors introduced by the refactor
+9. **Post-fix verification** — run verification checklist
 
 ## Phase 1: Inventory
 
@@ -311,9 +312,32 @@ For each fragment with fields unused across ALL consumers:
 - List of fields unused by every consumer
 - These are safe to remove from the fragment definition
 
-**`[SCOPED]` Boundary fragment restriction:** A boundary fragment field can only be marked "safe to remove" if ALL consumers (including out-of-scope) have been traced. Since out-of-scope consumers are not traced in scoped mode, boundary fragment fields are never "safe to remove" — they are classified as **Info** severity instead (see Step 3.4).
+**`[SCOPED]` Boundary fragment restriction:** A boundary fragment field can only be marked "safe to remove" if ALL consumers (including out-of-scope) have been traced. Since out-of-scope consumers are not traced in scoped mode, boundary fragment fields are never "safe to remove" — they are classified as **Info** severity instead (see Step 3.5).
 
-### Step 3.3: Fragment Splitting Recommendations
+### Step 3.3: Shared Query Splitting Recommendations
+
+For each query imported by multiple files, check whether each consumer uses a different subset of fields:
+
+1. From the trace results, group consumers by query operation name
+2. For each multi-consumer query, compare the per-consumer "used" field sets
+3. If consumers use materially different subsets, recommend splitting the query into per-page variants
+
+**Example finding:**
+
+```
+Shared Query: GetUser (src/queries/user.graphql:3)
+Consumers: 3 files import this query
+  - UserProfile.tsx uses: id, name, email, avatar, bio
+  - UserListItem.tsx uses: id, name
+  - UserSettings.tsx uses: id, name, email, preferences
+Recommendation: Split into GetUserProfile, GetUserListItem, GetUserSettings
+```
+
+**Split threshold:** Recommend splitting when any consumer uses fewer than 60% of the query's selected fields, OR when the query selects 5+ fields that no single consumer uses entirely. These are guidelines — present the per-consumer usage breakdown and let the user decide.
+
+**`[SCOPED]`:** In scoped mode, only in-scope consumers are traced. Flag queries that have out-of-scope consumers as needing full-project analysis before splitting.
+
+### Step 3.4: Fragment Splitting Recommendations
 
 For each fragment with fields used by SOME consumers but not others:
 - Fragment name
@@ -323,18 +347,19 @@ For each fragment with fields used by SOME consumers but not others:
 
 **`[SCOPED]`:** Fragment splitting recommendations for boundary fragments are preliminary. Out-of-scope consumers may use fields differently. Recommend a full-project re-run before applying boundary fragment splits.
 
-### Step 3.4: Severity Ranking
+### Step 3.5: Severity Ranking
 
 Rank all findings:
 
 | Severity | Criteria | Action |
 |----------|----------|--------|
 | **High** | Field unused by all consumers, easy removal | Remove field from query or fragment |
+| **High** | Shared query with consumers using materially different field subsets | Recommend per-page query split |
 | **Medium** | Fragment field used by some consumers but not others | Recommend fragment split |
 | **Low** | Single unused field in a small query, low payload impact | Remove field (optional) |
 | **Info** | `[SCOPED]` Boundary fragment field unused by in-scope consumers, but out-of-scope consumers not traced | No action — requires full-project analysis to confirm |
 
-### Step 3.5: Compile the Audit Report
+### Step 3.6: Compile the Audit Report
 
 Present findings grouped by severity (high first):
 
@@ -342,13 +367,18 @@ Present findings grouped by severity (high first):
 HIGH SEVERITY:
 1. GetUserProfile — 5 unused fields (src/queries/user.graphql:3)
 2. Fragment UserFields — 2 fields unused by all 3 consumers
+3. Shared Query GetUser — 3 consumers use different field subsets
+   - UserProfile.tsx: 5/8 fields (63%)
+   - UserListItem.tsx: 2/8 fields (25%)
+   - UserSettings.tsx: 4/8 fields (50%)
+   Recommendation: Split into GetUserProfile, GetUserListItem, GetUserSettings
 
 MEDIUM SEVERITY:
-3. Fragment UserFields — avatar used by 1/3 consumers, role used by 1/3 consumers
+4. Fragment UserFields — avatar used by 1/3 consumers, role used by 1/3 consumers
    Recommendation: Split into UserFieldsBase + UserFieldsProfile + UserFieldsAdmin
 
 LOW SEVERITY:
-4. GetSettings — 1 unused field (src/queries/settings.graphql:8)
+5. GetSettings — 1 unused field (src/queries/settings.graphql:8)
 ```
 
 ### Phase 3 Gate
@@ -357,9 +387,9 @@ LOW SEVERITY:
 STOP. Present the audit report and ask:
 
 > "Here are the findings ranked by severity. How would you like to proceed?
-> 1. **Fix all** — Remove all unused fields and split recommended fragments
+> 1. **Fix all** — Remove all unused fields, split shared queries, and split recommended fragments
 > 2. **Fix per-finding** — Walk through each finding, confirm individually
-> 3. **Split fragments** — Only apply fragment splitting recommendations
+> 3. **Split queries/fragments** — Only apply query and fragment splitting recommendations
 > 4. **Report only** — No changes, keep the report as documentation
 >
 > `[SCOPED]` Note: Info-severity findings for boundary fragments are preliminary — they reflect only in-scope consumers. A full-project analysis is recommended before acting on boundary fragment findings."
@@ -383,7 +413,19 @@ For each finding the user has confirmed:
 4. Preserve formatting, comments, and field aliases
 5. Do NOT modify indeterminate fields
 
-### Step 4.2: Apply Fragment Splits
+### Step 4.2: Apply Shared Query Splits
+
+For each shared query splitting the user has confirmed:
+
+1. Create a new query file (or add to the consumer's file) for each per-page variant
+2. Copy the original query, then remove fields not used by that consumer
+3. Update each consumer's import to reference its new per-page query
+4. If no consumer still uses the original shared query, delete it
+5. Verify each new query selects exactly the fields its consumer uses (no fields lost, no fields gained)
+
+**Naming convention:** Append the page or consumer context to the original name — e.g., `GetUser` → `GetUserForProfile`, `GetUserForListItem`, `GetUserForSettings`. Present the proposed names to the user before applying.
+
+### Step 4.3: Apply Fragment Splits
 
 For each fragment splitting the user has confirmed:
 
@@ -393,7 +435,7 @@ For each fragment splitting the user has confirmed:
 4. Remove the original fragment definition
 5. Verify each query still selects the same fields it did before (no fields lost, no fields added)
 
-### Step 4.3: Verify Syntax
+### Step 4.4: Verify Syntax
 
 After applying all edits, re-read each modified file and verify:
 
@@ -402,15 +444,69 @@ After applying all edits, re-read each modified file and verify:
 - Fragment spreads reference fragments that still exist
 - If any syntax issue is found, fix it immediately
 
-### Post-Fix Guidance
+### Step 4.5: Run Codegen
 
-After all fixes are applied, tell the user:
+After all edits are applied and syntax is verified, detect and run the project's GraphQL code generation tool.
 
-> "Fixes applied. Follow-up actions:
-> - Re-run GraphQL codegen if your project uses it (e.g., `graphql-codegen`, `relay-compiler`)
+**Detection order** — check in this order, stop at the first match:
+
+1. **package.json scripts** — look for scripts named `codegen`, `generate`, `gql:generate`, `graphql:codegen`, or scripts that invoke `graphql-codegen`, `relay-compiler`, `graphql-code-generator`, `gql.tada`, `genql`
+2. **Config files** — `codegen.ts`, `codegen.yml`, `codegen.json`, `.graphqlrc.yml`, `.graphqlrc.json`, `relay.config.js`, `relay.config.json`
+3. **Build tool plugins** — check `vite.config.*`, `next.config.*`, `webpack.config.*` for GraphQL codegen plugins
+
+If no codegen tool is detected, ask the user:
+
+> "I didn't detect a GraphQL code generation tool. Does this project use one? If so, what command runs it?"
+
+If the user confirms there is no codegen, skip to Step 4.6.
+
+**Run the codegen command** and capture its output. If it fails:
+
+1. Read the error output — codegen failures after field removal typically mean a consumer still references a removed field or type
+2. This is a **critical signal** — it means a field was removed that is still referenced somewhere
+3. Undo the offending field removal, re-check the trace for that field, and re-run codegen
+4. Do NOT proceed to type checking until codegen passes cleanly
+
+### Step 4.6: Run Type Checks
+
+After codegen passes (or was skipped), run the project's type checker to catch any type errors introduced by the refactor.
+
+**Detection order:**
+
+1. **TypeScript** — check for `tsconfig.json`. Run `npx tsc --noEmit` (or the project's type-check script from package.json, e.g., `typecheck`, `type-check`, `tsc`)
+2. **Flow** — check for `.flowconfig`. Run `npx flow check`
+3. **Python (mypy/pyright)** — check for `mypy.ini`, `pyrightconfig.json`, `pyproject.toml` with `[tool.mypy]` or `[tool.pyright]`. Run the detected tool
+4. **Go** — check for `go.mod`. Run `go build ./...`
+
+If no type checker is detected, ask the user:
+
+> "I didn't detect a type checker. Does this project use one? If so, what command runs it?"
+
+If the user confirms there is no type checker, skip to Post-Fix Summary.
+
+**Run the type check command** and capture its output. If it fails:
+
+1. Read the error output — type errors after field removal typically mean consuming code still references a removed field
+2. For each type error, determine whether:
+   - A field was removed that a consumer still accesses → undo the removal, update the trace
+   - Generated types are stale → re-run codegen first (Step 4.5)
+   - The type error is pre-existing (existed before this refactor) → note it but do not fix unrelated errors
+3. Re-run type checks after each fix until they pass cleanly or only pre-existing errors remain
+
+### Post-Fix Summary
+
+After codegen and type checks pass (or were skipped), tell the user:
+
+> "Fixes applied and verified. Summary:
+> - [N] fields removed from [M] queries/fragments
+> - [N] queries split into per-page variants (if applicable)
+> - [N] fragments split (if applicable)
+> - Codegen: [passed / skipped / N/A]
+> - Type check: [passed / skipped / N/A]
+>
+> Follow-up actions:
 > - Run your test suite to verify nothing broke
-> - Check if removed fields should also be removed from other shared fragments
-> - If fragments were split, update any documentation that references the original fragment names"
+> - If fragments or queries were split, update any documentation that references the original names"
 
 ## Red Flags
 
@@ -434,6 +530,10 @@ These thoughts mean STOP — you are about to violate the Iron Law:
 - "I'll skip the component set gate — the user already told me the route"
 - "The out-of-scope consumers probably don't use this field either"
 - "I can edit this boundary fragment — it's just one field"
+- "Every page needs the same query — no point splitting"
+- "Codegen passed last time, I can skip it after this change"
+- "The type errors are probably pre-existing, I'll ignore them"
+- "I'll run codegen later, let me just finish the edits first"
 
 ## Common Rationalizations
 
@@ -454,6 +554,10 @@ These thoughts mean STOP — you are about to violate the Iron Law:
 | "Out-of-scope consumers won't be affected" | You haven't traced them. Treat their fields as indeterminate. |
 | "I can infer the route's components from the file structure" | Check the router config. File structure doesn't reveal route groups, parallel routes, or lazy loading. |
 | "The component set gate is redundant since the user named the route" | Routes resolve to components through framework conventions. The user confirms the resolution, not the route name. |
+| "All pages need the same data, no point splitting the query" | If consumers use different field subsets, they're fetching unnecessary data. Present the per-consumer breakdown and let the user decide. |
+| "Codegen is optional, the edits look correct" | Codegen catches references to removed fields that tracing missed. It's a safety net, not busywork. |
+| "Type errors are unrelated to my changes" | Verify each error. Type errors after field removal are the exact signal that a consumer still references a removed field. |
+| "I'll run codegen and type checks at the end" | Run codegen immediately after edits. Type errors compound — catching them early prevents cascading fixes. |
 
 ## Verification Checklist
 
@@ -467,6 +571,9 @@ Before declaring work complete, verify each item:
 - [ ] User selected fix scope before any edits were applied
 - [ ] All modified files contain valid GraphQL syntax
 - [ ] No used or indeterminate fields were removed
+- [ ] Shared queries with divergent consumer usage were flagged for splitting
+- [ ] Codegen ran successfully after all edits (or confirmed not applicable)
+- [ ] Type checks passed after all edits (or confirmed not applicable)
 - [ ] `[SCOPED]` Route was resolved via framework router config, not guessed from file structure
 - [ ] `[SCOPED]` User confirmed the component set before query discovery
 - [ ] `[SCOPED]` All boundary fragments were identified and flagged
@@ -483,11 +590,15 @@ Before declaring work complete, verify each item:
 | `[SCOPED]` Framework not detected | Ask user to identify the router and entry component(s) manually |
 | `[SCOPED]` Lazy-loaded components not resolved | Follow the dynamic import to the target file; if it's a code-split bundle, ask the user for the component path |
 | `[SCOPED]` Fragment consumed by out-of-scope code | Mark it as a boundary fragment; treat all its fields as indeterminate for out-of-scope consumers |
+| Codegen command not found | Check package.json scripts, then config files (codegen.ts, codegen.yml). Ask the user if nothing is found. |
+| Codegen fails after field removal | A consumer still references the removed field or type. Read the error, undo the offending removal, re-check the trace. |
+| Type errors after edits | Distinguish new errors (caused by this refactor) from pre-existing ones. Fix new errors by undoing the removal or updating the consumer. |
+| Shared query has too many consumers to split | Present the per-consumer usage table and let the user decide which consumers warrant their own query. Not every consumer needs a split. |
 
 ## Out of Scope
 
 This skill does NOT:
 - Modify the GraphQL schema
-- Update TypeScript generated types (re-run codegen instead)
 - Analyze mutations or subscriptions (over-fetching is a query concern)
-- Run external tools or scripts
+- Fix pre-existing type errors unrelated to the refactor
+- Run the test suite (tell the user to run it as a follow-up)
