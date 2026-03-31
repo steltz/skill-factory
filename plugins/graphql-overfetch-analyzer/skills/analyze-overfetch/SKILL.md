@@ -3,6 +3,21 @@ name: analyze-overfetch
 description: Use when analyzing a codebase for GraphQL queries that fetch more data than is consumed by the application code
 ---
 
+<!-- BASELINE TEST (remove after GREEN)
+Test: Invoke this skill against a codebase with GraphQL queries and fragments.
+FAIL criteria (v0.1.0 skill fails if Claude does ANY of these without being told):
+1. Discovers fragments as first-class catalog items alongside queries
+2. Builds a fragment dependency graph (queries → fragments → nested fragments)
+3. Presents fragment consumer counts in the catalog
+4. Traces fragment fields through multiple consumers (multi-consumer tracking)
+5. Produces a cross-query audit with severity rankings (High/Medium/Low)
+6. Recommends fragment splitting for partially-used fragments
+7. Offers "Split fragments" as a fix scope option
+8. Runs a verification checklist with 8 specific checkbox items
+9. Has a "When Stuck" table with 4 problem/solution rows
+10. Uses a 4-phase pipeline: Inventory → Trace → Audit → Fix
+-->
+
 # Analyze Over-Fetch
 
 Discover GraphQL queries in a codebase, trace how their results are consumed, identify fields that are fetched but never used, and auto-fix the queries.
