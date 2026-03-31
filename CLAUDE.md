@@ -12,6 +12,7 @@ skill-factory/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
 │   │   ├── skills/
+│   │   │   ├── sft-build-plugin/
 │   │   │   ├── sft-scaffold-plugin/
 │   │   │   ├── sft-cross-cutting-patterns/
 │   │   │   ├── sft-skill-anatomy/
@@ -83,6 +84,7 @@ Repo-level hooks and scripts enforce plugin quality:
 
 | Skill | Trigger |
 |-------|---------|
+| `sft-build-plugin` | Use when building a new skill or plugin |
 | `sft-scaffold-plugin` | Use when creating a new plugin |
 | `sft-cross-cutting-patterns` | Use when authoring a SKILL.md |
 | `sft-skill-anatomy` | Use when studying how superpowers skills are structured |
@@ -93,26 +95,13 @@ Install: `claude plugin marketplace add /path/to/skill-factory && claude plugin 
 
 ## Workflow
 
-When creating new skills:
+When creating new skills or plugins, invoke `skill-factory-toolkit:sft-build-plugin`. It orchestrates the full brainstorm → plan → implement → package workflow and automatically loads the right sft skills at each phase boundary.
 
-1. **Brainstorm** — Use superpowers:brainstorming to explore the idea and write a design spec to `docs/specs/`
-2. **Plan** — Use superpowers:writing-plans to break the spec into bite-sized tasks, saved to `docs/plans/`
-3. **Implement** — Use superpowers:test-driven-development to author the skill (baseline -> write -> close loopholes)
-4. **Package** — Structure as a plugin with `.claude-plugin/plugin.json`
+## Skill Authoring Safety Net
 
-## Skill Auto-Loading
+When invoking `superpowers:writing-plans` in this repo, ALWAYS pre-load `sft-cross-cutting-patterns` and `sft-scaffold-plugin` first. This applies even if you arrived here from `superpowers:brainstorming` directly — the sft context is required for plan quality.
 
-When doing skill-authoring work in this repo, you MUST invoke the relevant sft skills before proceeding. This is not optional — these skills contain the patterns and standards that ensure quality.
-
-| When you are... | Invoke these sft skills first |
-|---|---|
-| Brainstorming a new skill or plugin idea | `sft-skill-comparison-matrix`, `sft-skill-anatomy` |
-| Planning skill implementation | `sft-cross-cutting-patterns`, `sft-scaffold-plugin` |
-| Writing or editing a SKILL.md | `sft-cross-cutting-patterns`, `sft-skill-comparison-matrix` |
-| Creating a new plugin | `sft-scaffold-plugin` |
-| Bumping versions or writing changelog | `sft-versioning-guide` |
-
-Load the mapped skills at the start of the relevant workflow stage. Do not load all 5 at once — only the subset for your current activity.
+When bumping plugin versions or writing changelog entries in this repo, ALWAYS pre-load `sft-versioning-guide` first.
 
 ## Reference Files
 
