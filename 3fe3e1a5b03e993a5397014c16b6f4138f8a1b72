@@ -1,0 +1,24 @@
+plugins/graphql-overfetch-analyzer/skills/analyze-overfetch/SKILL.md
+  fdb28f4900e74612 305-347
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "3fe3e1a5b03e993a5397014c16b6f4138f8a1b72",
+  "prompts": {
+    "fdb28f4900e74612": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fc8c1794-81d1-4e97-b7eb-3bcd128ccdc9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 43,
+      "total_deletions": 0,
+      "accepted_lines": 43,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/97ac3c4570ed13f73c0762770a41adedaa68bf3ba1b0aa5b821ea1d93cdd2d88"
+    }
+  }
+}
