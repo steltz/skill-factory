@@ -1,0 +1,26 @@
+plugins/graphql-overfetch-analyzer/CHANGELOG.md
+  fdb28f4900e74612 3-16
+plugins/graphql-overfetch-analyzer/.claude-plugin/plugin.json
+  fdb28f4900e74612 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "dc43ed0cc7987b57f61fa3271e31948ba3cc6b2f",
+  "prompts": {
+    "fdb28f4900e74612": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fc8c1794-81d1-4e97-b7eb-3bcd128ccdc9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 15,
+      "total_deletions": 1,
+      "accepted_lines": 15,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/810be5f1f912686c20aec4a799bc7ba678af9588d8c29106022d6ba92f675f3b"
+    }
+  }
+}
