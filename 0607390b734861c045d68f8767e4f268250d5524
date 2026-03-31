@@ -1,0 +1,24 @@
+docs/plans/2026-03-30-graphql-overfetch-analyzer-v2.md
+  fdb28f4900e74612 1-964
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "0607390b734861c045d68f8767e4f268250d5524",
+  "prompts": {
+    "fdb28f4900e74612": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fc8c1794-81d1-4e97-b7eb-3bcd128ccdc9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 964,
+      "total_deletions": 0,
+      "accepted_lines": 964,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/c8df67b94355a26dd0e124318f0c633087b719177dbae4e0e66a39e37fd254f8"
+    }
+  }
+}
