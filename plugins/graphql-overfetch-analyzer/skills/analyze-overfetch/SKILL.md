@@ -16,6 +16,7 @@ Violating the letter of the rules is violating the spirit of the rules.
 - Code cleanup — removing dead query fields after feature removal
 - Pre-migration audit — understanding what data is actually consumed
 - Fragment analysis — finding fields in shared fragments that no consumer uses
+- Route-specific audit — analyzing only the queries used by a single page or route
 
 ## When NOT to Use
 
@@ -23,11 +24,24 @@ Violating the letter of the rules is violating the spirit of the rules.
 - Schema-only repos with no query consumers
 - Queries are dynamically generated at runtime (the skill traces static code)
 - User wants to analyze subscriptions or mutations (out of scope)
+- Route is server-rendered with no client-side GraphQL queries (nothing to trace)
 
 ```
 NO FIELD MAY BE REMOVED WITHOUT A TRACED CONSUMER AND AN AUDITED FINDING.
 Inventory → Trace → Audit → Fix. No phase skipped. No phase reordered.
 ```
+
+## Preamble: Scope Selection
+
+Before starting the pipeline, ask the user:
+
+> "What scope should this analysis cover?
+> 1. **Full project** — analyze all GraphQL queries in the codebase
+> 2. **Single route** — analyze only the queries used by a specific page or route"
+
+If the user selects **full project**, skip all steps and annotations marked `[SCOPED]` throughout the pipeline. The full-project path is the default and works exactly as before.
+
+If the user selects **single route**, record the target route (e.g., `/users/:id`) and proceed to Step 1.2 after Step 1.1.
 
 ## Checklist
 
@@ -63,7 +77,45 @@ If no schema is found locally, ask the user:
 
 Do NOT proceed without a schema.
 
-### Step 1.2: Find All Query Operations
+### Step 1.2: Resolve Route Scope `[SCOPED]`
+
+Map the target route to its component set. Consult `route-resolution-patterns.md` for framework-specific conventions.
+
+**Framework detection** — check in this order, stop at the first match:
+
+1. **Next.js App Router** — `app/` directory with `page.tsx` files
+2. **Next.js Pages Router** — `pages/` directory with page files
+3. **React Router** — `<Routes>`, `createBrowserRouter`, `<Switch>` in source
+4. **Vue Router** — `createRouter`, `new VueRouter`, route config arrays
+5. **Angular Router** — `RouterModule.forRoot`, `provideRouter`, route configs
+6. **Manual fallback** — ask the user to identify the entry component(s) for the route
+
+**Import tree traversal:**
+
+1. From the entry component(s), follow imported child components one level deep
+2. Include layout/wrapper components that render the route (parent routes, layouts)
+3. Record the complete component set:
+
+| Field | Value |
+|-------|-------|
+| Target route | The route path the user specified |
+| Framework | Detected framework and router type |
+| Entry files | Top-level page/route component(s) |
+| Full file list | All components in scope (entry + layouts + one-level imports) |
+
+<HARD-GATE>
+STOP. Present the component set and ask:
+
+> "I detected [framework] and resolved route `[path]` to these N components:
+> [numbered list of files]
+>
+> Are any components missing or incorrectly included?
+> Confirm to proceed to query discovery within this scope."
+
+Do NOT proceed to Step 1.3 until the user confirms.
+</HARD-GATE>
+
+### Step 1.3: Find All Query Operations
 
 Search for GraphQL queries using these patterns:
 
@@ -76,7 +128,9 @@ Search for GraphQL queries using these patterns:
 - Grep for multi-line strings containing `query \w+` or `query {`
 - Grep for framework invocations: `useQuery(`, `client.query(`, `client.execute(`, `graphql(` — then read the referenced query definition
 
-### Step 1.3: Find All Fragments
+**`[SCOPED]`:** Search only within the confirmed component set from Step 1.2 and their direct imports. Do not search files outside the scope boundary.
+
+### Step 1.4: Find All Fragments
 
 Search for GraphQL fragments alongside queries:
 
@@ -86,7 +140,9 @@ Search for GraphQL fragments alongside queries:
 4. For each query, record which fragments it spreads (`...FragmentName`)
 5. Build a dependency graph: queries → fragments → nested fragments (fragments that spread other fragments)
 
-### Step 1.4: Build the Catalog
+**`[SCOPED]`:** Start from scoped queries discovered in Step 1.3, but follow the fragment dependency graph exhaustively — including fragments defined outside the scope boundary. A scoped query may spread a fragment defined in a shared utilities file; that fragment and its nested fragments must be included. Additionally, for each discovered fragment, search the entire codebase for all consumers (not just scoped ones). Record out-of-scope consumers for boundary fragment detection in Step 1.5.
+
+### Step 1.5: Build the Catalog
 
 **Operations:**
 
@@ -110,8 +166,11 @@ For each discovered fragment, record:
 | File | Exact file path and line number |
 | Selected fields | Full list of fields in this fragment |
 | Consumer count | Number of operations that spread this fragment |
+| Boundary | `[SCOPED]` Yes/No — whether any consumer is outside the scope boundary |
 
 Present the catalog to the user as two numbered lists: Operations and Fragments.
+
+**`[SCOPED]`:** Add scope metadata to each catalog entry. Flag **boundary fragments** — fragments that have at least one consumer outside the confirmed component set. Boundary fragments require conservative handling in later phases because not all consumers can be traced.
 
 ### Phase 1 Gate
 
@@ -122,6 +181,8 @@ STOP. Present the catalog and ask:
 > 1. Are any queries or fragments missing?
 > 2. Should any be excluded from analysis?
 >
+> `[SCOPED]` Note: M of these fragments are **boundary fragments** — they have consumers outside the scoped route. Findings for boundary fragment fields will be preliminary and require a full-project analysis to confirm.
+>
 > Confirm to proceed to tracing."
 
 Do NOT proceed to Phase 2 until the user confirms.
@@ -130,6 +191,8 @@ Do NOT proceed to Phase 2 until the user confirms.
 ## Phase 2: Trace
 
 For each operation and fragment in the validated catalog, trace how the result is consumed in application code. Consult `tracing-patterns.md` for language-specific patterns when encountering unfamiliar consumer code.
+
+**`[SCOPED]`:** Trace only within the confirmed component set. For boundary fragments, out-of-scope consumers are NOT traced — their fields are treated as **indeterminate** (not unused). This ensures scoped analysis never produces false "safe to remove" findings for shared fragments.
 
 ### Step 2.1: Find the Consumer
 
@@ -175,6 +238,8 @@ When a query spreads a fragment, trace the fragment's fields through the query's
 
 **Multi-consumer tracking:** Fragments spread by multiple queries get per-consumer tracking. A fragment field is "used" if *any* consumer of that fragment accesses it. Track usage per-consumer for the audit phase.
 
+**`[SCOPED]` Boundary fragment handling:** For boundary fragments, record per-consumer usage only for in-scope consumers. Out-of-scope consumers contribute an indeterminate mark to every field in the fragment. The trace report must show the out-of-scope consumer count.
+
 ### Step 2.5: Build the Usage Map
 
 For each operation and fragment, produce:
@@ -203,6 +268,13 @@ Used by all: id, name, email
 Used by some: avatar (GetUserProfile only), role (GetUser only)
 Unused by all: createdAt, lastLoginIp
 Indeterminate: metadata (GetUserList spreads into untyped object)
+
+[SCOPED] Boundary Fragment: UserFields (src/fragments/user.graphql:1)
+In-scope consumers: GetUser (traced)
+Out-of-scope consumers: 2 (NOT traced — fields indeterminate)
+Used by in-scope: id, name, email
+Unused by in-scope: createdAt, lastLoginIp, avatar, role
+Indeterminate (out-of-scope): ALL fields (2 untraced consumers)
 ```
 
 ### Phase 2 Gate
@@ -239,6 +311,8 @@ For each fragment with fields unused across ALL consumers:
 - List of fields unused by every consumer
 - These are safe to remove from the fragment definition
 
+**`[SCOPED]` Boundary fragment restriction:** A boundary fragment field can only be marked "safe to remove" if ALL consumers (including out-of-scope) have been traced. Since out-of-scope consumers are not traced in scoped mode, boundary fragment fields are never "safe to remove" — they are classified as **Info** severity instead (see Step 3.4).
+
 ### Step 3.3: Fragment Splitting Recommendations
 
 For each fragment with fields used by SOME consumers but not others:
@@ -246,6 +320,8 @@ For each fragment with fields used by SOME consumers but not others:
 - Fields used by all consumers (base fragment)
 - Fields used by specific consumers only (consumer-specific fragments)
 - Recommend splitting: `UserFields` → `UserFieldsBase` + `UserFieldsProfile` + `UserFieldsAdmin`
+
+**`[SCOPED]`:** Fragment splitting recommendations for boundary fragments are preliminary. Out-of-scope consumers may use fields differently. Recommend a full-project re-run before applying boundary fragment splits.
 
 ### Step 3.4: Severity Ranking
 
@@ -256,6 +332,7 @@ Rank all findings:
 | **High** | Field unused by all consumers, easy removal | Remove field from query or fragment |
 | **Medium** | Fragment field used by some consumers but not others | Recommend fragment split |
 | **Low** | Single unused field in a small query, low payload impact | Remove field (optional) |
+| **Info** | `[SCOPED]` Boundary fragment field unused by in-scope consumers, but out-of-scope consumers not traced | No action — requires full-project analysis to confirm |
 
 ### Step 3.5: Compile the Audit Report
 
@@ -283,7 +360,9 @@ STOP. Present the audit report and ask:
 > 1. **Fix all** — Remove all unused fields and split recommended fragments
 > 2. **Fix per-finding** — Walk through each finding, confirm individually
 > 3. **Split fragments** — Only apply fragment splitting recommendations
-> 4. **Report only** — No changes, keep the report as documentation"
+> 4. **Report only** — No changes, keep the report as documentation
+>
+> `[SCOPED]` Note: Info-severity findings for boundary fragments are preliminary — they reflect only in-scope consumers. A full-project analysis is recommended before acting on boundary fragment findings."
 
 Do NOT proceed to Phase 4 until the user selects a fix scope.
 </HARD-GATE>
@@ -291,6 +370,8 @@ Do NOT proceed to Phase 4 until the user selects a fix scope.
 ## Phase 4: Fix
 
 Apply user-approved edits to query and fragment definitions.
+
+**`[SCOPED]` Boundary fragment safety rule:** Do NOT edit boundary fragment definitions unless the user explicitly overrides after a warning that out-of-scope consumers have not been traced. Query-level field removals (fields selected directly in a query, not via a fragment spread) are always safe regardless of scope.
 
 ### Step 4.1: Apply Field Removals
 
@@ -348,6 +429,11 @@ These thoughts mean STOP — you are about to violate the Iron Law:
 - "The trace was thorough enough — I don't need the audit phase"
 - "This field name sounds like it's unused"
 - "I'll fix the fragments later, let me just fix the queries now"
+- "I know which components this route renders, no need to check the router"
+- "This fragment is only used by this route" (without searching for other consumers)
+- "I'll skip the component set gate — the user already told me the route"
+- "The out-of-scope consumers probably don't use this field either"
+- "I can edit this boundary fragment — it's just one field"
 
 ## Common Rationalizations
 
@@ -364,6 +450,10 @@ These thoughts mean STOP — you are about to violate the Iron Law:
 | "I can skip the audit for simple codebases" | Simple codebases still benefit from severity ranking and the user review gate |
 | "Fragment splitting is obvious, no need to present options" | The user decides whether to split. Present the recommendation and wait. |
 | "Post-fix verification is just re-reading files" | Verification confirms no used or indeterminate fields were removed. It's a safety check, not busywork. |
+| "This fragment is probably only used here" | Prove it by searching the entire codebase for consumers. Boundary detection exists for this reason. |
+| "Out-of-scope consumers won't be affected" | You haven't traced them. Treat their fields as indeterminate. |
+| "I can infer the route's components from the file structure" | Check the router config. File structure doesn't reveal route groups, parallel routes, or lazy loading. |
+| "The component set gate is redundant since the user named the route" | Routes resolve to components through framework conventions. The user confirms the resolution, not the route name. |
 
 ## Verification Checklist
 
@@ -377,6 +467,10 @@ Before declaring work complete, verify each item:
 - [ ] User selected fix scope before any edits were applied
 - [ ] All modified files contain valid GraphQL syntax
 - [ ] No used or indeterminate fields were removed
+- [ ] `[SCOPED]` Route was resolved via framework router config, not guessed from file structure
+- [ ] `[SCOPED]` User confirmed the component set before query discovery
+- [ ] `[SCOPED]` All boundary fragments were identified and flagged
+- [ ] `[SCOPED]` No boundary fragment definitions were edited without explicit user override
 
 ## When Stuck
 
@@ -386,6 +480,9 @@ Before declaring work complete, verify each item:
 | Trace hits dynamic access pattern | Mark all fields on that path as indeterminate |
 | Fragment has no discoverable consumers | Ask user — it may be dead code, or consumed by another repo |
 | Modified query fails syntax check | Undo the edit, re-examine the original, fix manually |
+| `[SCOPED]` Framework not detected | Ask user to identify the router and entry component(s) manually |
+| `[SCOPED]` Lazy-loaded components not resolved | Follow the dynamic import to the target file; if it's a code-split bundle, ask the user for the component path |
+| `[SCOPED]` Fragment consumed by out-of-scope code | Mark it as a boundary fragment; treat all its fields as indeterminate for out-of-scope consumers |
 
 ## Out of Scope
 

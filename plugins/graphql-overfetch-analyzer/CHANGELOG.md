@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.0] - 2026-03-30
+
+### Added
+
+- Route-scoped analysis mode — opt-in scope selection to analyze only the queries used by a single page or route
+- Route Resolution Gate (Step 1.2) — framework detection, component set resolution, and user confirmation before query discovery
+- Boundary fragment concept — fragments with consumers outside the scope boundary are flagged and handled conservatively
+- Info severity level for boundary fragment fields that require full-project analysis to confirm
+- route-resolution-patterns.md supporting file for framework-specific route-to-component mapping (Next.js, React Router, Vue Router, Angular Router)
+- 5 red flags, 4 rationalizations, 4 verification checklist items, and 3 When Stuck rows for route-scoped analysis
+
 ## [1.0.0] - 2026-03-30
 
 ### Changed
