@@ -234,3 +234,71 @@ STOP. Present the trace report and ask:
 
 Do NOT proceed to Phase 3 until the user confirms.
 </HARD-GATE>
+
+## Phase 3: Audit
+
+Cross-reference trace results across all operations and fragments. Produce a structured findings report with severity rankings.
+
+### Step 3.1: Per-Query Findings
+
+For each query with unused fields in its own selection (not from fragments), record:
+- Query name and file/line
+- Consumer file/line
+- List of unused fields
+- List of indeterminate fields
+
+### Step 3.2: Per-Fragment Findings
+
+For each fragment with fields unused across ALL consumers:
+- Fragment name and file/line
+- List of fields unused by every consumer
+- These are safe to remove from the fragment definition
+
+### Step 3.3: Fragment Splitting Recommendations
+
+For each fragment with fields used by SOME consumers but not others:
+- Fragment name
+- Fields used by all consumers (base fragment)
+- Fields used by specific consumers only (consumer-specific fragments)
+- Recommend splitting: `UserFields` → `UserFieldsBase` + `UserFieldsProfile` + `UserFieldsAdmin`
+
+### Step 3.4: Severity Ranking
+
+Rank all findings:
+
+| Severity | Criteria | Action |
+|----------|----------|--------|
+| **High** | Field unused by all consumers, easy removal | Remove field from query or fragment |
+| **Medium** | Fragment field used by some consumers but not others | Recommend fragment split |
+| **Low** | Single unused field in a small query, low payload impact | Remove field (optional) |
+
+### Step 3.5: Compile the Audit Report
+
+Present findings grouped by severity (high first):
+
+```
+HIGH SEVERITY:
+1. GetUserProfile — 5 unused fields (src/queries/user.graphql:3)
+2. Fragment UserFields — 2 fields unused by all 3 consumers
+
+MEDIUM SEVERITY:
+3. Fragment UserFields — avatar used by 1/3 consumers, role used by 1/3 consumers
+   Recommendation: Split into UserFieldsBase + UserFieldsProfile + UserFieldsAdmin
+
+LOW SEVERITY:
+4. GetSettings — 1 unused field (src/queries/settings.graphql:8)
+```
+
+### Phase 3 Gate
+
+<HARD-GATE>
+STOP. Present the audit report and ask:
+
+> "Here are the findings ranked by severity. How would you like to proceed?
+> 1. **Fix all** — Remove all unused fields and split recommended fragments
+> 2. **Fix per-finding** — Walk through each finding, confirm individually
+> 3. **Split fragments** — Only apply fragment splitting recommendations
+> 4. **Report only** — No changes, keep the report as documentation"
+
+Do NOT proceed to Phase 4 until the user selects a fix scope.
+</HARD-GATE>
