@@ -1,0 +1,28 @@
+plugins/graphql-overfetch-analyzer/skills/analyze-overfetch/SKILL.md
+  9d6fe9285501ca0b 54,56-58,315,317-340,350,357,362,370-374,377,381,390,392,416-428,438,447,449,451-455,457,459-507,509,533-536,557-560,574-576,593-596,603-604
+plugins/graphql-overfetch-analyzer/.claude-plugin/plugin.json
+  9d6fe9285501ca0b 4
+plugins/graphql-overfetch-analyzer/CHANGELOG.md
+  9d6fe9285501ca0b 3-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "064c459a6675745d2302371acffbccdb635f40fd",
+  "prompts": {
+    "9d6fe9285501ca0b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ed3b5e86-4ed5-40fb-904d-a0109b7a9079",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 151,
+      "total_deletions": 22,
+      "accepted_lines": 151,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/a0f482bfc17a0a125c3297973521a345bf5cd385a5115d70b6e878ca9f0b37d5"
+    }
+  }
+}
