@@ -1,0 +1,22 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "b0e554960ffc2b2b42b11f708dfd35821557d793",
+  "prompts": {
+    "fdb28f4900e74612": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fc8c1794-81d1-4e97-b7eb-3bcd128ccdc9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 15,
+      "accepted_lines": 0,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/43c98ae9147fe93ba3eb7f77012e28e908a144d8fd6c27e49e812df257926972"
+    }
+  }
+}
