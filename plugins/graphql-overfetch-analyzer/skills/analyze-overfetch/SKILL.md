@@ -56,3 +56,88 @@ You MUST create a task for each of these items and complete them in order:
 6. **Phase 3 Gate** — present findings report, user selects fix scope
 7. **Phase 4: Fix** — apply edits, verify syntax
 8. **Post-fix verification** — run verification checklist
+
+## Phase 1: Inventory
+
+Locate all GraphQL artifacts in the codebase and build a query + fragment catalog.
+
+### Step 1.1: Find the Schema
+
+Search in this order. Stop at the first match:
+
+1. `.graphql` and `.gql` files containing type definitions (`type Query`, `type Mutation`, `type <Name>`, `input`, `interface`, `enum`)
+2. Introspection JSON files (`schema.json`, `introspection-result.json`, `*.introspection.json`)
+3. SDL exports in code — look for `buildSchema()`, `makeExecutableSchema()`, `typeDefs` variables
+
+If no schema is found locally, ask the user:
+
+> "I couldn't find a GraphQL schema in this codebase. Please provide one of:
+> - A file path (can be in another repo)
+> - A URL to an introspection endpoint
+> - A schema registry identifier"
+
+Do NOT proceed without a schema.
+
+### Step 1.2: Find All Query Operations
+
+Search for GraphQL queries using these patterns:
+
+**Standalone files:**
+- Glob for `**/*.graphql` and `**/*.gql`
+- Read each file; extract operations that start with `query` (catalog but skip `mutation` and `subscription` — they are out of scope for tracing and fixing)
+
+**Inline in code (any language):**
+- Grep for tagged template literals: `` gql` ``, `` graphql` ``
+- Grep for multi-line strings containing `query \w+` or `query {`
+- Grep for framework invocations: `useQuery(`, `client.query(`, `client.execute(`, `graphql(` — then read the referenced query definition
+
+### Step 1.3: Find All Fragments
+
+Search for GraphQL fragments alongside queries:
+
+1. `fragment` definitions in `.graphql` / `.gql` files
+2. Inline `fragment` definitions in tagged template literals
+3. For each fragment, record: name, target type, selected fields, file/line
+4. For each query, record which fragments it spreads (`...FragmentName`)
+5. Build a dependency graph: queries → fragments → nested fragments (fragments that spread other fragments)
+
+### Step 1.4: Build the Catalog
+
+**Operations:**
+
+For each discovered query, record:
+
+| Field | Value |
+|-------|-------|
+| Operation name | The named query (e.g., `GetUser`) or `<anonymous>` |
+| File | Exact file path and line number |
+| Selected fields | Full list including nested selections and spread fragments |
+| Schema source | Local path or user-provided location |
+
+**Fragments:**
+
+For each discovered fragment, record:
+
+| Field | Value |
+|-------|-------|
+| Fragment name | e.g., `UserFields` |
+| Target type | The type the fragment is defined on (e.g., `User`) |
+| File | Exact file path and line number |
+| Selected fields | Full list of fields in this fragment |
+| Consumer count | Number of operations that spread this fragment |
+
+Present the catalog to the user as two numbered lists: Operations and Fragments.
+
+### Phase 1 Gate
+
+<HARD-GATE>
+STOP. Present the catalog and ask:
+
+> "Here are the N queries and M fragments I found. Please review:
+> 1. Are any queries or fragments missing?
+> 2. Should any be excluded from analysis?
+>
+> Confirm to proceed to tracing."
+
+Do NOT proceed to Phase 2 until the user confirms.
+</HARD-GATE>
