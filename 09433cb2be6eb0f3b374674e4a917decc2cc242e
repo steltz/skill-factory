@@ -1,0 +1,30 @@
+plugins/graphql-overfetch-analyzer/CHANGELOG.md
+  d8c50ddb84f22780 3-13
+plugins/graphql-overfetch-analyzer/.claude-plugin/plugin.json
+  d8c50ddb84f22780 4
+plugins/graphql-overfetch-analyzer/skills/analyze-overfetch/SKILL.md
+  d8c50ddb84f22780 19,27,34-45,80-118,131-133,143-145,169,173,184-185,195-196,241-242,271-277,314-315,324-325,335,363-365,374-375,432-436,453-456,470-473,483-485
+plugins/graphql-overfetch-analyzer/skills/analyze-overfetch/route-resolution-patterns.md
+  d8c50ddb84f22780 1-271
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "09433cb2be6eb0f3b374674e4a917decc2cc242e",
+  "prompts": {
+    "d8c50ddb84f22780": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e67eb482-3f37-4396-92f8-0bb0f4437280",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter <nicholas.stelter@gmail.com>",
+      "messages": [],
+      "total_additions": 384,
+      "total_deletions": 5,
+      "accepted_lines": 384,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/e147427c09194f0bf82ff4eb81cd3e01e473e5efd6a3f0b7143b3d220770121d"
+    }
+  }
+}
