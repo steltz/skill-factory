@@ -302,3 +302,46 @@ STOP. Present the audit report and ask:
 
 Do NOT proceed to Phase 4 until the user selects a fix scope.
 </HARD-GATE>
+
+## Phase 4: Fix
+
+Apply user-approved edits to query and fragment definitions.
+
+### Step 4.1: Apply Field Removals
+
+For each finding the user has confirmed:
+
+1. Open the file containing the query or fragment definition
+2. Remove each unused field from the selection set
+3. If removing a field leaves an empty selection set on a nested object, remove the entire nested selection (e.g., if `posts { body }` had `body` removed and no other fields remain, remove the `posts` selection entirely)
+4. Preserve formatting, comments, and field aliases
+5. Do NOT modify indeterminate fields
+
+### Step 4.2: Apply Fragment Splits
+
+For each fragment splitting the user has confirmed:
+
+1. Create the base fragment containing fields used by all consumers
+2. Create consumer-specific fragments containing fields used only by those consumers
+3. Update each query to spread the base fragment plus the relevant consumer-specific fragment
+4. Remove the original fragment definition
+5. Verify each query still selects the same fields it did before (no fields lost, no fields added)
+
+### Step 4.3: Verify Syntax
+
+After applying all edits, re-read each modified file and verify:
+
+- The query or fragment still parses as valid GraphQL (balanced braces, no trailing commas, no empty selection sets)
+- No fields were accidentally removed that were marked as used or indeterminate
+- Fragment spreads reference fragments that still exist
+- If any syntax issue is found, fix it immediately
+
+### Post-Fix Guidance
+
+After all fixes are applied, tell the user:
+
+> "Fixes applied. Follow-up actions:
+> - Re-run GraphQL codegen if your project uses it (e.g., `graphql-codegen`, `relay-compiler`)
+> - Run your test suite to verify nothing broke
+> - Check if removed fields should also be removed from other shared fragments
+> - If fragments were split, update any documentation that references the original fragment names"
