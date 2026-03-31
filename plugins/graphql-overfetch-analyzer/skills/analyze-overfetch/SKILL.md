@@ -345,3 +345,67 @@ After all fixes are applied, tell the user:
 > - Run your test suite to verify nothing broke
 > - Check if removed fields should also be removed from other shared fragments
 > - If fragments were split, update any documentation that references the original fragment names"
+
+## Red Flags
+
+These thoughts mean STOP — you are about to violate the Iron Law:
+
+- "The queries are simple, I can skip the catalog"
+- "I already know which fields are unused"
+- "There's only one query, I don't need the full pipeline"
+- "I'll trace and fix at the same time"
+- "The schema is obvious, I don't need to find it"
+- "This fragment is only used once, no need to track consumers"
+- "I'll just remove fields that look unused"
+- "The user wants a quick answer, I'll skip the audit"
+- "Indeterminate probably means unused"
+- "I can split this fragment without checking all consumers"
+- "The trace was thorough enough — I don't need the audit phase"
+- "This field name sounds like it's unused"
+- "I'll fix the fragments later, let me just fix the queries now"
+
+## Common Rationalizations
+
+| Rationalization | Reality |
+|-----------------|---------|
+| "Only one query, skip the catalog" | One query still needs schema validation and user confirmation |
+| "Fields are obviously unused" | Obvious to you is not obvious — trace the code |
+| "Indeterminate means probably unused" | Indeterminate means you don't know. Leave it. |
+| "I'll combine Trace and Fix" | Combining phases skips the user validation gate |
+| "The user said to just fix it" | The user approved the pipeline. Follow it. |
+| "This field can't possibly be used" | Prove it by finding the consumer, or mark indeterminate |
+| "Fragments are just inlined queries" | Fragments have multiple consumers. Removing a field from a fragment affects every query that spreads it. |
+| "One consumer doesn't use this fragment field, so remove it" | All consumers must be checked. One unused consumer doesn't make the field unused. |
+| "I can skip the audit for simple codebases" | Simple codebases still benefit from severity ranking and the user review gate |
+| "Fragment splitting is obvious, no need to present options" | The user decides whether to split. Present the recommendation and wait. |
+| "Post-fix verification is just re-reading files" | Verification confirms no used or indeterminate fields were removed. It's a safety check, not busywork. |
+
+## Verification Checklist
+
+Before declaring work complete, verify each item:
+
+- [ ] Every query and fragment in the codebase was cataloged
+- [ ] User validated the catalog before tracing began
+- [ ] Every operation's field usage was traced through consuming code
+- [ ] User validated the trace results before audit began
+- [ ] Audit report includes severity rankings and fragment analysis
+- [ ] User selected fix scope before any edits were applied
+- [ ] All modified files contain valid GraphQL syntax
+- [ ] No used or indeterminate fields were removed
+
+## When Stuck
+
+| Problem | Solution |
+|---------|----------|
+| Schema not found locally | Ask user for file path, introspection URL, or registry ID |
+| Trace hits dynamic access pattern | Mark all fields on that path as indeterminate |
+| Fragment has no discoverable consumers | Ask user — it may be dead code, or consumed by another repo |
+| Modified query fails syntax check | Undo the edit, re-examine the original, fix manually |
+
+## Out of Scope
+
+This skill does NOT:
+- Modify the GraphQL schema
+- Update TypeScript generated types (re-run codegen instead)
+- Analyze mutations or subscriptions (over-fetching is a query concern)
+- Run external tools or scripts
