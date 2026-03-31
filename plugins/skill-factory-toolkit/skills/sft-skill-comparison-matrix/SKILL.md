@@ -54,6 +54,36 @@ Given characteristics of a new skill, pick the closest existing template:
 | Offers a diagnostic methodology | `systematic-debugging` | Phased investigation, supporting technique files, escalation rules |
 | Is a lightweight utility process | `using-git-worktrees` | Priority-ordered decision, safety checks, quick reference table |
 
+## Skill Type Decision Tree
+
+```dot
+digraph skill_type {
+  rankdir=TB
+  node [shape=box, style=rounded]
+
+  start [label="New skill idea"]
+  q_failure [label="Does it guard against\na specific failure mode?"]
+  q_process [label="Is it a repeatable\nstep-by-step process?"]
+  q_lookup [label="Is the primary content\nlookup/reference data?"]
+  q_meta [label="Is it about skills,\ntools, or Claude itself?"]
+
+  discipline [label="Discipline", shape=doubleoctagon]
+  technique [label="Technique", shape=doubleoctagon]
+  reference [label="Reference", shape=doubleoctagon]
+  meta [label="Meta", shape=doubleoctagon]
+
+  start -> q_failure
+  q_failure -> discipline [label="Yes"]
+  q_failure -> q_process [label="No"]
+  q_process -> technique [label="Yes"]
+  q_process -> q_lookup [label="No"]
+  q_lookup -> reference [label="Yes"]
+  q_lookup -> q_meta [label="No"]
+  q_meta -> meta [label="Yes"]
+  q_meta -> technique [label="No\n(default)"]
+}
+```
+
 ## Structural Patterns by Type
 
 ### Discipline Skills
@@ -134,6 +164,9 @@ Does your skill need supporting files?
 
 5. Test scenarios for skill validation?
    YES -> Separate test-*.md files (see systematic-debugging: 3 test files)
+
+6. Self-contained subsystem (server, templates, multiple coordinated files)?
+   YES -> Separate directory (see brainstorming: scripts/)
 ```
 
 ## Size Calibration

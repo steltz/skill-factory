@@ -88,6 +88,19 @@ Not mechanically enforced. Document it when you know a plugin requires specific 
 5. Run `bin/validate-plugin plugins/<plugin-name>` to confirm
 6. Commit all changes together (content + version bump + changelog)
 
+## Skill Evolution Patterns
+
+Typical version progression for a skill plugin, with the graphql-overfetch-analyzer as a real example:
+
+| Stage | Version | What Happens | Example (graphql-overfetch-analyzer) |
+|-------|---------|--------------|--------------------------------------|
+| MVP | 0.1.0 | Core skill ships with baseline test passing. Minimal sections, no supporting files. | N/A (shipped at 1.0.0) |
+| Production | 1.0.0 | Skill is complete: all type-required sections present, supporting files extracted, validation passes. | Core analyze-overfetch skill with Iron Law, rationalizations, red flags, verification checklist |
+| Feature | 1.x.0 | New supporting files, expanded sections, additional modes. No breaking changes. | 1.1.0: added route-resolution-patterns.md; 1.2.0: added tracing-patterns.md; 1.3.0: route-scoped analysis mode |
+| Breaking | 2.0.0 | Skill rename, trigger change, or removal. Existing invocations may break. | Not yet reached |
+
+**When to go straight to 1.0.0:** If the skill was built using the full sft-build-plugin workflow (brainstorm → plan → implement → test), it ships production-ready. Use 0.x.0 only for experimental skills that need user feedback before stabilizing.
+
 ## Common Mistakes
 
 - Forgetting to bump version after changes → Validation catches missing CHANGELOG entry

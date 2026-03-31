@@ -75,8 +75,8 @@ See the `skill-factory-toolkit:sft-versioning-guide` skill for full rules, CHANG
 
 Repo-level hooks and scripts enforce plugin quality:
 
-- **`hooks/hooks.json`** — Pre-commit hook that runs `bin/validate-plugin` against all staged plugins. Checks frontmatter format, naming conventions, plugin.json schema, and semver validity.
-- **`bin/validate-plugin <plugin-dir>`** — On-demand full validation. Run manually to check a plugin before committing: `bin/validate-plugin plugins/<plugin-name>`
+- **`hooks/hooks.json`** — Pre-commit hook that runs `bin/validate-plugin` against all staged plugins. Checks frontmatter format, naming conventions, plugin.json schema, semver validity, and semantic content quality.
+- **`bin/validate-plugin <plugin-dir>`** — On-demand full validation. Checks structural requirements plus semantic checks: description length/quality, workflow summary detection, discipline skill section enforcement, supporting file reference validation, and forbidden @ link/path references. Run manually: `bin/validate-plugin plugins/<plugin-name>`
 
 ## Factory Toolkit
 

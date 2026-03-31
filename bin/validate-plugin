@@ -110,6 +110,81 @@ if [[ -d "$SKILLS_DIR" ]]; then
     elif ! echo "$fm_desc" | grep -qE '^Use when'; then
       fail "Skill '$skill_name' description must start with 'Use when' (got: '${fm_desc:0:40}...')"
     fi
+
+    # --- Semantic checks ---
+
+    # Read SKILL.md body (everything after the closing --- of frontmatter)
+    skill_body=$(sed '1,/^---$/d' "$skill_md")
+
+    # Description length check (>1024 chars is too long)
+    desc_len=${#fm_desc}
+    if [[ $desc_len -gt 1024 ]]; then
+      fail "Skill '$skill_name' description is $desc_len chars (max 1024)"
+    fi
+
+    # Workflow summary heuristic: description should not contain workflow sequences
+    if echo "$fm_desc" | grep -qiE '(first.*then|step [0-9]|1\).*2\)|phase [0-9])'; then
+      fail "Skill '$skill_name' description looks like a workflow summary (must be triggering conditions only)"
+    fi
+
+    # When to Use / When NOT to Use sections (warn only, not an error)
+    if ! echo "$skill_body" | grep -qE '^## When to Use'; then
+      echo "WARN: Skill '$skill_name' missing '## When to Use' section"
+    fi
+    if ! echo "$skill_body" | grep -qE '^## When NOT to Use'; then
+      echo "WARN: Skill '$skill_name' missing '## When NOT to Use' section"
+    fi
+
+    # Discipline skill detection: has Iron Law NO in code block
+    is_discipline=false
+    if echo "$skill_body" | grep -qE '^(NO |```$)' && echo "$skill_body" | grep -qE '^NO .+ WITHOUT'; then
+      is_discipline=true
+    fi
+
+    if [[ "$is_discipline" == "true" ]]; then
+      # Red Flags section required for discipline skills
+      if ! echo "$skill_body" | grep -qE '^## Red Flags'; then
+        fail "Skill '$skill_name' is a discipline skill but missing '## Red Flags' section"
+      fi
+      # Rationalizations table required
+      if ! echo "$skill_body" | grep -qE '\| (Excuse|Rationalization)'; then
+        fail "Skill '$skill_name' is a discipline skill but missing rationalizations table (| Excuse or | Rationalization)"
+      fi
+      # Verification checklist required
+      if ! echo "$skill_body" | grep -qE '^\- \[ \]'; then
+        fail "Skill '$skill_name' is a discipline skill but missing verification checklist (- [ ] items)"
+      fi
+    fi
+
+    # Supporting file reference validation
+    # Only check files listed in a "## Supporting Files" section, not every .md mention
+    # (Reference/comparison skills mention other skills' files as examples, not local refs)
+    # Extract Supporting Files section: from heading to next ## heading or end of file
+    supporting_section=$(echo "$skill_body" | awk '/^## Supporting Files/{found=1; next} found && /^## /{exit} found{print}' || true)
+    if [[ -n "$supporting_section" ]]; then
+      referenced_files=$(echo "$supporting_section" | grep -F '|' | grep -oE '[a-zA-Z0-9_-]+\.md' | sort -u || true)
+      for ref_file in $referenced_files; do
+        case "$ref_file" in
+          SKILL.md|CHANGELOG.md|CLAUDE.md|README.md|MEMORY.md) continue ;;
+        esac
+        if [[ ! -f "$skill_dir/$ref_file" ]]; then
+          fail "Skill '$skill_name' lists '$ref_file' in Supporting Files but file not found in skill directory"
+        fi
+      done
+    fi
+
+    # Forbidden @ link references
+    if echo "$skill_body" | grep -qE '@[a-zA-Z0-9_/-]+\.(md|json|js|sh)'; then
+      fail "Skill '$skill_name' uses @ link references (use skill names instead)"
+    fi
+
+    # Forbidden file path references (relative navigation or absolute repo paths)
+    # Strip inline code (backtick-delimited) before checking to avoid false positives from examples
+    body_no_code=$(echo "$skill_body" | sed 's/`[^`]*`//g')
+    if echo "$body_no_code" | grep -qE '(\.\.\/|\/plugins\/|\/references\/)'; then
+      fail "Skill '$skill_name' uses file path references (use skill names instead)"
+    fi
+
   done
 fi
 

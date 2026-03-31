@@ -1,10 +1,25 @@
 #!/usr/bin/env bash
 # SessionStart hook for skill-factory-toolkit plugin
-# Prints sft skill auto-loading mapping as a system reminder
+# Context-aware: detects SKILL.md in cwd, matching plans, or falls back to default
 
 set -euo pipefail
 
-REMINDER="[skill-factory-toolkit] To build a new skill or plugin, invoke sft-build-plugin.\\nIt handles sft skill loading at each phase automatically."
+# Determine context-aware message
+REMINDER=""
+
+if [ -f "SKILL.md" ]; then
+  # User is inside a skill directory
+  skill_name=$(basename "$PWD")
+  REMINDER="[skill-factory-toolkit] Detected SKILL.md in cwd ($skill_name). For authoring guidance, invoke sft-cross-cutting-patterns."
+elif ls docs/plans/*.md >/dev/null 2>&1; then
+  # There are plans in the repo — suggest resuming implementation
+  latest_plan=$(ls -t docs/plans/*.md 2>/dev/null | head -1)
+  plan_name=$(basename "$latest_plan" .md)
+  REMINDER="[skill-factory-toolkit] Found plan: $plan_name. To resume implementation, invoke superpowers:executing-plans or superpowers:subagent-driven-development.\\nTo build a new skill or plugin, invoke sft-build-plugin."
+else
+  # Default message
+  REMINDER="[skill-factory-toolkit] To build a new skill or plugin, invoke sft-build-plugin.\\nIt handles sft skill loading at each phase automatically."
+fi
 
 escape_for_json() {
     local s="$1"

@@ -170,3 +170,9 @@ NEVER use flowcharts for:
 | Generic flowchart labels (step1, helper2) | Use semantic labels describing the action |
 | Skipping "When NOT to Use" | Add explicit exclusion criteria |
 | Deploying without baseline test | Run RED phase first -- no skill without failing test |
+
+## Supporting Files
+
+| File | Purpose |
+|------|---------|
+| baseline-test-guide.md | How to design and run baseline tests per skill type, with result template and real example |

@@ -14,7 +14,7 @@ Single entry point for building skills and plugins in the skill-factory repo. Pr
 
 ## When NOT to Use
 
-- Editing an existing skill (just load `sft-cross-cutting-patterns` directly)
+- Editing an existing skill (use the Refinement Workflow below instead)
 - Working outside the skill-factory repo
 - Brainstorming without intent to build (use `superpowers:brainstorming` directly)
 
@@ -39,7 +39,8 @@ You MUST create a task for each of these items and complete them in order:
 6. **Implement** — invoke the selected execution skill
 7. **Pre-load version context** — invoke `skill-factory-toolkit:sft-versioning-guide`
 8. **Version** — bump plugin version and update CHANGELOG.md
-9. **Finish** — invoke `superpowers:finishing-a-development-branch`
+9. **Quality gate** — run the quality gate checklist below
+10. **Finish** — invoke `superpowers:finishing-a-development-branch`
 
 ### Flow Control
 
@@ -51,6 +52,21 @@ You MUST create a task for each of these items and complete them in order:
 
 **Steps 7-8 fire after implementation.** When all implementation tasks are done, return to this checklist. Load sft-versioning-guide before touching the version or changelog.
 
+## Quality Gate
+
+Before finishing (step 10), verify ALL of these pass:
+
+- [ ] Description starts with "Use when" and contains triggering conditions only (no workflow summary)
+- [ ] Skill has all type-required sections (discipline: Iron Law, Red Flags, Rationalizations, Verification Checklist)
+- [ ] All `.md` files referenced in SKILL.md body exist in the skill directory
+- [ ] No `@` link references in SKILL.md
+- [ ] No file path references (`../`, `/plugins/`, `/skills/`, `/references/`) in SKILL.md
+- [ ] Word count is appropriate for skill type (see sft-cross-cutting-patterns Word Count Targets)
+- [ ] `bin/validate-plugin plugins/<plugin-name>` passes with zero errors
+- [ ] Baseline test is documented (failures recorded, mapped to skill sections)
+
+If any item fails, fix it before proceeding to step 10.
+
 ## Common Mistakes
 
 | Mistake | Fix |
@@ -59,3 +75,17 @@ You MUST create a task for each of these items and complete them in order:
 | Following brainstorming's "invoke writing-plans" exit directly | Return to this checklist. Step 3 must happen before step 4. |
 | Skipping the version phase | Step 7 exists because this was missed in the first build. Don't skip it. |
 | Loading all sft skills at once | Only load the subset for the current phase. The table tells you which. |
+
+## Refinement Workflow
+
+For iterating on existing skills (not building new ones):
+
+1. Load `skill-factory-toolkit:sft-cross-cutting-patterns`
+2. Read the target SKILL.md
+3. Identify what needs to change (content, structure, enforcement, supporting files)
+4. If adding supporting files or sections, check the comparison matrix: `skill-factory-toolkit:sft-skill-comparison-matrix`
+5. Make the changes
+6. Load `skill-factory-toolkit:sft-versioning-guide`
+7. Determine bump type (patch for content fixes, minor for new sections/files)
+8. Update version and CHANGELOG.md
+9. Run `bin/validate-plugin plugins/<plugin-name>` to verify
