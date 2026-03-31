@@ -141,3 +141,96 @@ STOP. Present the catalog and ask:
 
 Do NOT proceed to Phase 2 until the user confirms.
 </HARD-GATE>
+
+## Phase 2: Trace
+
+For each operation and fragment in the validated catalog, trace how the result is consumed in application code. Consult `tracing-patterns.md` for language-specific patterns when encountering unfamiliar consumer code.
+
+### Step 2.1: Find the Consumer
+
+Starting from where the query is invoked, identify the variable that holds the response data:
+
+- JS/TS: `const { data } = useQuery(GET_USER)` → trace `data`
+- Python: `result = client.execute(query)` → trace `result`
+- Go: `resp, err := client.Query(ctx, &query, vars)` → trace `resp` or `query`
+
+If the query is defined in a standalone `.graphql` file, search for imports or references to that file to find the invocation site.
+
+### Step 2.2: Track Field Access
+
+Follow the response variable through the consuming code. Record every field access:
+
+- **Destructuring:** `const { user: { name, email } } = data` → `user.name`, `user.email` used
+- **Dot notation:** `data.user.name` → `user.name` used
+- **Bracket notation:** `data['user']['name']` → `user.name` used
+- **Spread:** `{ ...data.user }` into a typed target → all fields of `user` used
+- **Function arguments:** `renderProfile(data.user)` → follow into `renderProfile` one level deep
+- **Map/iteration:** `data.posts.map(p => p.title)` → `posts.title` used
+
+### Step 2.3: Handle Indirection
+
+Follow the response variable one level deep into called functions or child components. If the data disappears into any of these patterns, mark ALL fields on that path as **indeterminate** (not unused):
+
+- `JSON.stringify(data)` — opaque serialization
+- `console.log(data)` or logging utilities
+- `Object.keys(data.user)` — dynamic access
+- `data[variableName]` — computed property access
+- Spread into an untyped target: `{ ...data.user }` with no type annotation
+- Reflection or metaprogramming
+
+**Indeterminate means "we can't tell" — never flag indeterminate fields as unused.**
+
+### Step 2.4: Fragment-Aware Tracing
+
+When a query spreads a fragment, trace the fragment's fields through the query's consumer:
+
+1. Identify which fields in the consumer come from the spread fragment
+2. Track access to those fields using the same rules as Step 2.2
+3. Record which consumer (operation) contributed each "used" mark
+
+**Multi-consumer tracking:** Fragments spread by multiple queries get per-consumer tracking. A fragment field is "used" if *any* consumer of that fragment accesses it. Track usage per-consumer for the audit phase.
+
+### Step 2.5: Build the Usage Map
+
+For each operation and fragment, produce:
+
+| Category | Fields |
+|----------|--------|
+| **Fetched** | All fields selected in the query or fragment |
+| **Used** | Fields with confirmed access in consuming code |
+| **Unused** | Fetched minus Used minus Indeterminate |
+| **Indeterminate** | Fields where usage could not be determined |
+| **Consumers** | (fragments only) Which operations contributed each "used" mark |
+
+### Step 2.6: Compile the Trace Report
+
+For each operation or fragment that has unused fields:
+
+```
+Query: GetUser (src/queries/user.graphql:3)
+Consumer: src/components/UserProfile.tsx:15
+Unused fields: user.createdAt, user.updatedAt, user.posts.body
+Indeterminate fields: user.metadata (spread into untyped object)
+
+Fragment: UserFields (src/fragments/user.graphql:1)
+Consumers: GetUser, GetUserList, GetUserProfile
+Used by all: id, name, email
+Used by some: avatar (GetUserProfile only), role (GetUser only)
+Unused by all: createdAt, lastLoginIp
+Indeterminate: metadata (GetUserList spreads into untyped object)
+```
+
+### Phase 2 Gate
+
+<HARD-GATE>
+STOP. Present the trace report and ask:
+
+> "Here are the tracing results for N operations and M fragments. For each I've listed:
+> - Fields confirmed unused
+> - Fields marked indeterminate (conservatively kept)
+> - Fragment fields with per-consumer usage breakdown
+>
+> Please review. Are any findings incorrect? Confirm to proceed to audit."
+
+Do NOT proceed to Phase 3 until the user confirms.
+</HARD-GATE>
