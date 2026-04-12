@@ -1,0 +1,30 @@
+plugins/ui-finisher/skills/audit-ui-handlers/SKILL.md
+  be563b948bc91c83 3,8,14-17,22-23,26-27,33,38,44-52,54-96,100,194-198,214-217,223-225,228,244-248
+plugins/ui-finisher/CHANGELOG.md
+  be563b948bc91c83 12-14,17
+plugins/ui-finisher/.claude-plugin/plugin.json
+  be563b948bc91c83 3
+docs/specs/2026-04-11-ui-finisher-design.md
+  be563b948bc91c83 10,12,18-21,42-55,237,247
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "d48b7ee673bf56444d862fe26da49017bb79e3f5",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 112,
+      "total_deletions": 30,
+      "accepted_lines": 112,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/ff8f9a6effb84d1b99b1ad1794acaaf7a366c2b861025c3047f18a212daed92f"
+    }
+  }
+}
