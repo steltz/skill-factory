@@ -22,7 +22,7 @@ Single entry point for building skills and plugins in the skill-factory repo. Pr
 
 | Phase | Pre-load these sft skills | Then invoke |
 |-------|--------------------------|-------------|
-| **Brainstorm** | `sft-skill-comparison-matrix`, `sft-skill-anatomy` | `superpowers:brainstorming` |
+| **Brainstorm** | `sft-skill-comparison-matrix`, `sft-skill-anatomy`, `sft-coordination-patterns` | `superpowers:brainstorming` |
 | **Plan** | `sft-cross-cutting-patterns`, `sft-scaffold-plugin` | `superpowers:writing-plans` |
 | **Implement** | _(sft context carried in the plan)_ | `superpowers:subagent-driven-development` or `superpowers:executing-plans` |
 | **Version** | `sft-versioning-guide` | _(manual — bump version and changelog)_ |
@@ -31,7 +31,7 @@ Single entry point for building skills and plugins in the skill-factory repo. Pr
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Pre-load brainstorm context** — invoke `skill-factory-toolkit:sft-skill-comparison-matrix` and `skill-factory-toolkit:sft-skill-anatomy`
+1. **Pre-load brainstorm context** — invoke `skill-factory-toolkit:sft-skill-comparison-matrix`, `skill-factory-toolkit:sft-skill-anatomy`, and `skill-factory-toolkit:sft-coordination-patterns`
 2. **Brainstorm** — invoke `superpowers:brainstorming` (spec saved to `docs/specs/`)
 3. **Pre-load plan context** — invoke `skill-factory-toolkit:sft-cross-cutting-patterns` and `skill-factory-toolkit:sft-scaffold-plugin`
 4. **Plan** — invoke `superpowers:writing-plans` (plan saved to `docs/plans/`)

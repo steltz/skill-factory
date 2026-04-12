@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.2.0] - 2026-04-11
+
+### Added
+
+- `sft-coordination-patterns` reference skill describing the five multi-agent coordination patterns (generator-verifier, orchestrator-subagent, agent teams, message bus, shared state), five design principles, pattern-to-structure cheat sheet, and a worked example showing how the skill-factory-toolkit itself exemplifies layered orchestrator-subagent + shared state + generator-verifier patterns
+- "Coordination Pattern" column in `sft-skill-comparison-matrix` primary comparison table
+- `sft-coordination-patterns` pre-loaded during the Brainstorm phase of `sft-build-plugin`
+
 ## [3.1.0] - 2026-03-31
 
 ### Added
