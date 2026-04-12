@@ -1,0 +1,28 @@
+CLAUDE.md
+  ab8405b1b87c4d5b 93
+plugins/skill-factory-toolkit/CHANGELOG.md
+  ab8405b1b87c4d5b 3-10
+plugins/skill-factory-toolkit/.claude-plugin/plugin.json
+  ab8405b1b87c4d5b 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "841598616c8d30452c6951f2b7f1d597994a0639",
+  "prompts": {
+    "ab8405b1b87c4d5b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8150e14-3c1b-4cbb-9f12-aeabcd1187ff",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 1,
+      "accepted_lines": 10,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/0a78e05b645a0e8eee4ab670464f0b0fcbfc5a1bc2903c086cd5bd4c60ff4771"
+    }
+  }
+}
