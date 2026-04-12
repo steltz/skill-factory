@@ -1,0 +1,24 @@
+docs/specs/2026-04-11-ui-finisher-design.md
+  be563b948bc91c83 1-282
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "f1c5c7dab63decf22dd57aef900c86a981d4786a",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 282,
+      "total_deletions": 0,
+      "accepted_lines": 282,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/d4a86b1b4ef9cf1c5ddf9d97ab805e86ae8ceef7fc521cf42848f2d89261e668"
+    }
+  }
+}
