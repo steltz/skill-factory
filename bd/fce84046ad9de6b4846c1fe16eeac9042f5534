@@ -1,0 +1,24 @@
+plugins/ui-finisher/skills/audit-ui-handlers/SKILL.md
+  be563b948bc91c83 8-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "bdfce84046ad9de6b4846c1fe16eeac9042f5534",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 186,
+      "total_deletions": 1,
+      "accepted_lines": 186,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/23b0e48730c7eab247985b73874899846a57066c324e33e9a6ae8689070aebda"
+    }
+  }
+}
