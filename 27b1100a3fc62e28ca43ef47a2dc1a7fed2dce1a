@@ -1,0 +1,26 @@
+docs/plans/2026-04-11-coordination-patterns.md
+  ab8405b1b87c4d5b 1-582
+docs/specs/2026-04-11-coordination-patterns-design.md
+  ab8405b1b87c4d5b 1-233
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "27b1100a3fc62e28ca43ef47a2dc1a7fed2dce1a",
+  "prompts": {
+    "ab8405b1b87c4d5b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8150e14-3c1b-4cbb-9f12-aeabcd1187ff",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 815,
+      "total_deletions": 0,
+      "accepted_lines": 815,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/3724afc3b34ae66eb2d9916dfbf657a8057f0f5a1a21120903ec79fc9c4b4222"
+    }
+  }
+}
