@@ -1,0 +1,66 @@
+plugins/skill-factory-toolkit/skills/sft-build-plugin/SKILL.md
+  ab8405b1b87c4d5b 25,34
+plugins/skill-factory-toolkit/skills/sft-coordination-patterns/SKILL.md
+  ab8405b1b87c4d5b 1-97
+CLAUDE.md
+  ab8405b1b87c4d5b 93
+plugins/ui-finisher/.claude-plugin/plugin.json
+  be563b948bc91c83 1-5
+plugins/ui-finisher/CHANGELOG.md
+  be563b948bc91c83 1-17
+docs/specs/2026-04-11-ui-finisher-design.md
+  be563b948bc91c83 1-297
+docs/plans/2026-04-11-ui-finisher.md
+  be563b948bc91c83 1-880
+plugins/ui-finisher/skills/audit-ui-handlers/SKILL.md
+  be563b948bc91c83 1-258
+docs/plans/2026-04-11-coordination-patterns.md
+  ab8405b1b87c4d5b 1-582
+plugins/ui-finisher/skills/audit-ui-handlers/report-template.md
+  be563b948bc91c83 1-81
+docs/specs/2026-04-11-coordination-patterns-design.md
+  ab8405b1b87c4d5b 1-233
+plugins/skill-factory-toolkit/CHANGELOG.md
+  ab8405b1b87c4d5b 3-10
+plugins/ui-finisher/skills/audit-ui-handlers/tiering-rules.md
+  be563b948bc91c83 1-105
+plugins/skill-factory-toolkit/.claude-plugin/plugin.json
+  ab8405b1b87c4d5b 4
+plugins/skill-factory-toolkit/skills/sft-skill-comparison-matrix/SKILL.md
+  ab8405b1b87c4d5b 12-27,40,42-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "2cd5585c3a602f88d65bce94f7766310515c850e",
+  "prompts": {
+    "ab8405b1b87c4d5b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8150e14-3c1b-4cbb-9f12-aeabcd1187ff",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 944,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/d7d9c06dfb43c9fe786d9c4b1ae84eb1deef4319f6270b7975d1805204c92eda"
+    },
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1657,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/566bd92c3b76b33e07cedfd87ea6962fd466611565f7ff7c87c9a32e2b85cd1f"
+    }
+  }
+}
