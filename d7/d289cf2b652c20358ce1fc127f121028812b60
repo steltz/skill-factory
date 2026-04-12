@@ -1,0 +1,24 @@
+plugins/ui-finisher/skills/audit-ui-handlers/report-template.md
+  be563b948bc91c83 1-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "d7d289cf2b652c20358ce1fc127f121028812b60",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 81,
+      "total_deletions": 0,
+      "accepted_lines": 81,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/df7f12886a43cda16df90ca757495e5ef3c6dd803495f08907f69e5ed5308c0c"
+    }
+  }
+}
