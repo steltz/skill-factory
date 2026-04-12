@@ -1,0 +1,24 @@
+plugins/skill-factory-toolkit/skills/sft-coordination-patterns/baseline-test-result.md
+  ab8405b1b87c4d5b 1-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "9c02730e449d98a05234ba4fbcaff6475422e5ce",
+  "prompts": {
+    "ab8405b1b87c4d5b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8150e14-3c1b-4cbb-9f12-aeabcd1187ff",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 39,
+      "total_deletions": 0,
+      "accepted_lines": 39,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/bc64c20d9f53c0833047fac31e7103b4217d448948ba3474e06a9d7534f4edf6"
+    }
+  }
+}
