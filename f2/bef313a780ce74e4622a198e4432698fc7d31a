@@ -1,0 +1,24 @@
+.claude-plugin/marketplace.json
+  be563b948bc91c83 16-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "f2bef313a780ce74e4622a198e4432698fc7d31a",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 282,
+      "total_deletions": 0,
+      "accepted_lines": 282,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/67f90961fa39afc05101851bd87c250d5fa227bf074e522889b12abe237e22e9"
+    }
+  }
+}
