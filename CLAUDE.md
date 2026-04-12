@@ -90,6 +90,7 @@ Repo-level hooks and scripts enforce plugin quality:
 | `sft-skill-anatomy` | Use when studying how superpowers skills are structured |
 | `sft-skill-comparison-matrix` | Use when deciding how to structure a new skill |
 | `sft-versioning-guide` | Use when bumping versions or creating changelog entries |
+| `sft-coordination-patterns` | Use when deciding a skill's multi-agent coordination pattern |
 
 Install: `claude plugin marketplace add /path/to/skill-factory && claude plugin install skill-factory-toolkit`
 

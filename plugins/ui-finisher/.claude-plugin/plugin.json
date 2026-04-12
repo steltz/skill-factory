@@ -1,0 +1,5 @@
+{
+  "name": "ui-finisher",
+  "description": "Audit a single page — by URL/route or file path — for unfinished interactive elements (orphaned buttons, stubbed handlers, missing side effects) and propose patches with human approval. Static analysis only.",
+  "version": "0.1.0"
+}

@@ -9,22 +9,22 @@ Machine-readable reference comparing all 14 superpowers skills (v5.0.6) by struc
 
 ## Primary Comparison Table
 
-| Skill | Type | Flow | Enforcement | Supporting Files | Word Count | Dispatches To | CSO Strategy |
-|-------|------|------|-------------|------------------|------------|---------------|--------------|
-| brainstorming | technique | checklist | flexible | 7 (visual companion, scripts, reviewer prompt) | ~1550 | writing-plans | symptoms |
-| dispatching-parallel-agents | technique | freeform | flexible | 0 | ~920 | none | symptoms |
-| executing-plans | technique | checklist | flexible | 0 | ~360 | finishing-a-development-branch, using-git-worktrees, subagent-driven-development | tools |
-| finishing-a-development-branch | technique | checklist | rigid | 0 | ~680 | none (called by others) | symptoms |
-| receiving-code-review | discipline | checklist | rigid | 0 | ~930 | none | symptoms |
-| requesting-code-review | technique | checklist | flexible | 1 (code-reviewer.md template) | ~400 | code-reviewer subagent | tools |
-| subagent-driven-development | technique | hybrid | rigid | 3 (implementer, spec-reviewer, code-quality-reviewer prompts) | ~1530 | finishing-a-development-branch, requesting-code-review, test-driven-development, using-git-worktrees | mixed |
-| systematic-debugging | discipline | checklist | rigid | 10 (techniques, tests, scripts) | ~1500 | test-driven-development, verification-before-completion | symptoms |
-| test-driven-development | discipline | checklist | rigid | 1 (testing-anti-patterns.md) | ~1500 | none | symptoms |
-| using-git-worktrees | technique | checklist | flexible | 0 | ~780 | finishing-a-development-branch | tools |
-| using-superpowers | meta | hybrid | rigid | 2 (codex-tools.md, gemini-tools.md) | ~760 | any skill (dispatcher) | mixed |
-| verification-before-completion | discipline | checklist | rigid | 0 | ~670 | none | symptoms |
-| writing-plans | technique | checklist | flexible | 1 (plan-document-reviewer-prompt.md) | ~910 | subagent-driven-development, executing-plans | tools |
-| writing-skills | meta | hybrid | rigid | 6 (testing guide, best practices, persuasion, graphviz, examples, renderer) | ~3210 | test-driven-development | mixed |
+| Skill | Type | Flow | Enforcement | Supporting Files | Word Count | Dispatches To | CSO Strategy | Coordination Pattern |
+|-------|------|------|-------------|------------------|------------|---------------|--------------|----------------------|
+| brainstorming | technique | checklist | flexible | 7 (visual companion, scripts, reviewer prompt) | ~1550 | writing-plans | symptoms | generator-verifier (with user) |
+| dispatching-parallel-agents | technique | freeform | flexible | 0 | ~920 | none | symptoms | agent teams |
+| executing-plans | technique | checklist | flexible | 0 | ~360 | finishing-a-development-branch, using-git-worktrees, subagent-driven-development | tools | orchestrator-subagent |
+| finishing-a-development-branch | technique | checklist | rigid | 0 | ~680 | none (called by others) | symptoms | none (utility) |
+| receiving-code-review | discipline | checklist | rigid | 0 | ~930 | none | symptoms | generator-verifier (as generator) |
+| requesting-code-review | technique | checklist | flexible | 1 (code-reviewer.md template) | ~400 | code-reviewer subagent | tools | generator-verifier (as verifier) |
+| subagent-driven-development | technique | hybrid | rigid | 3 (implementer, spec-reviewer, code-quality-reviewer prompts) | ~1530 | finishing-a-development-branch, requesting-code-review, test-driven-development, using-git-worktrees | mixed | orchestrator-subagent |
+| systematic-debugging | discipline | checklist | rigid | 10 (techniques, tests, scripts) | ~1500 | test-driven-development, verification-before-completion | symptoms | none (discipline) |
+| test-driven-development | discipline | checklist | rigid | 1 (testing-anti-patterns.md) | ~1500 | none | symptoms | generator-verifier (test/code) |
+| using-git-worktrees | technique | checklist | flexible | 0 | ~780 | finishing-a-development-branch | tools | none (utility) |
+| using-superpowers | meta | hybrid | rigid | 2 (codex-tools.md, gemini-tools.md) | ~760 | any skill (dispatcher) | mixed | none (meta) |
+| verification-before-completion | discipline | checklist | rigid | 0 | ~670 | none | symptoms | none (discipline) |
+| writing-plans | technique | checklist | flexible | 1 (plan-document-reviewer-prompt.md) | ~910 | subagent-driven-development, executing-plans | tools | generator-verifier (with user) |
+| writing-skills | meta | hybrid | rigid | 6 (testing guide, best practices, persuasion, graphviz, examples, renderer) | ~3210 | test-driven-development | mixed | none (meta) |
 
 ## Column Definitions
 
@@ -37,6 +37,11 @@ Machine-readable reference comparing all 14 superpowers skills (v5.0.6) by struc
 | Word Count | approximate | Size of SKILL.md only |
 | Dispatches To | skill names or "none" | Skills explicitly invoked during execution |
 | CSO Strategy | symptoms / tools / error messages / mixed | What keywords the description targets |
+| Coordination Pattern | generator-verifier / orchestrator-subagent / agent teams / message bus / shared state / none | Multi-agent coordination pattern the skill embodies (see `sft-coordination-patterns`) |
+
+## Coordination Pattern
+
+See `sft-coordination-patterns` for pattern definitions, design principles, and the worked example of how this toolkit itself embodies layered patterns.
 
 ## Decision Guide: Choosing a Structural Template
 
