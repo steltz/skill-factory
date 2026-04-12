@@ -1,0 +1,24 @@
+plugins/skill-factory-toolkit/skills/sft-build-plugin/SKILL.md
+  ab8405b1b87c4d5b 25,34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "3e038bbde588c5222751b89df878eebd94f35940",
+  "prompts": {
+    "ab8405b1b87c4d5b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8150e14-3c1b-4cbb-9f12-aeabcd1187ff",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 2,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/f051377d6314f257140ea3f254d216d383beccf342cc1ac953a894faaa73bf2b"
+    }
+  }
+}
