@@ -1,0 +1,24 @@
+plugins/ui-finisher/skills/audit-ui-handlers/tiering-rules.md
+  be563b948bc91c83 1-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "794d8713012d58d6588e378a4a542d8fec1cb370",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 105,
+      "total_deletions": 0,
+      "accepted_lines": 105,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/c5ce0501a08cf8deecc1fc76a10553f081db86a98c4a79bd23bd1780e0565719"
+    }
+  }
+}
