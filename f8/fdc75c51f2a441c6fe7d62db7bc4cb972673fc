@@ -1,0 +1,24 @@
+plugins/skill-factory-toolkit/skills/sft-coordination-patterns/SKILL.md
+  ab8405b1b87c4d5b 8,10,12-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "f8fdc75c51f2a441c6fe7d62db7bc4cb972673fc",
+  "prompts": {
+    "ab8405b1b87c4d5b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8150e14-3c1b-4cbb-9f12-aeabcd1187ff",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 88,
+      "total_deletions": 3,
+      "accepted_lines": 88,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/d42b5119d399cee10bc30943de34cc87e4aa1480a219c4e728a5c387c5b07fac"
+    }
+  }
+}
