@@ -1,0 +1,24 @@
+docs/plans/2026-04-11-ui-finisher.md
+  be563b948bc91c83 1-880
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "d8f17d105c9f52e1002d4093c35087cd239071df",
+  "prompts": {
+    "be563b948bc91c83": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44328194-5b1d-4905-9728-b01d32b2c596",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "nic stelter",
+      "messages": [],
+      "total_additions": 880,
+      "total_deletions": 0,
+      "accepted_lines": 880,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/98d60ddc9604b8e836433adfe73022d67981ea763b40240354aa5acbfa104e8e"
+    }
+  }
+}
